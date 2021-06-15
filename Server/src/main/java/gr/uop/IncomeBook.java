@@ -1,9 +1,6 @@
 package gr.uop;
 
-import java.util.LinkedList;
-
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 
 public class IncomeBook {

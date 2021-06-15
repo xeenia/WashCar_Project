@@ -1,5 +1,9 @@
 package gr.uop;
 
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public class Car {
     private int id;
     private String arrival_time;
@@ -7,6 +11,26 @@ public class Car {
     private int cost;
     private String date;
     private String departure_time;
+    private ImageView accept;
+    private ImageView cancel;
+    private Button acceptButton;
+    private Button cancelButton;
+
+    public Button getAcceptButton() {
+        return this.acceptButton;
+    }
+
+    public void setAcceptButton(Button acceptButton) {
+        this.acceptButton = acceptButton;
+    }
+
+    public Button getCancelButton() {
+        return this.cancelButton;
+    }
+
+    public void setCancelButton(Button cancelButton) {
+        this.cancelButton = cancelButton;
+    }
 
     public String getDeparture_time() {
         return this.departure_time;
@@ -62,6 +86,27 @@ public class Car {
         this.date=date;
         this.arrival_time=arrival_time;
         this.cost=cost;
+
+        Image acceptIcon = new Image(Server.class.getResourceAsStream("img/entry2.png"));
+        accept=new ImageView(acceptIcon); 
+        accept.setFitHeight(20);
+        accept.setFitWidth(20);
+        acceptButton = new Button();
+        acceptButton.setGraphic(accept);
+        Image cancelIcon = new Image(Server.class.getResourceAsStream("img/x2.png"));
+        cancel=new ImageView(cancelIcon); 
+        cancel.setFitHeight(20);
+        cancel.setFitWidth(20);
+        cancelButton = new Button();
+        cancelButton.setGraphic(cancel);
+
+        acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;");
+        acceptButton.setOnMousePressed(event -> acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 3 1 1 3;"));
+        acceptButton.setOnMouseReleased(event -> acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;"));
+
+        cancelButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;");
+        cancelButton.setOnMousePressed(event -> cancelButton.setStyle("-fx-background-color: transparent; -fx-padding: 3 1 1 3;"));
+        cancelButton.setOnMouseReleased(event -> cancelButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;"));
     }
 
    
