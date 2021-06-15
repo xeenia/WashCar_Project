@@ -1,7 +1,12 @@
 package gr.uop;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -56,19 +62,25 @@ public class Server extends Application {
         BorderPane p_bp_search = new BorderPane();
         p_bp_search.setLeft(tf_search);
         
-        TableView table = new TableView();
+        TableView table = new TableView<>();
         table.setEditable(true);
         table.setPrefHeight(Integer.MAX_VALUE);
-        TableColumn idCol = new TableColumn("ID");
-        TableColumn dateCol = new TableColumn("Date");
-        TableColumn timeCol = new TableColumn("Time");
-        TableColumn carCol = new TableColumn("Car Number");
-        TableColumn costCol = new TableColumn("Cost");
+        TableColumn idCol = new TableColumn<Car,Integer>("ID");
+        TableColumn dateCol = new TableColumn<Car,String>("Date");
+        TableColumn timeCol = new TableColumn<Car,String>("Time");
+        TableColumn carCol = new TableColumn<Car,String>("Car Number");
+        TableColumn costCol = new TableColumn<Car,Integer>("Cost");
         TableColumn b1Col = new TableColumn("Acceptance");
         TableColumn b2Col = new TableColumn("Annulment");
 
-        table.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+        timeCol.setCellValueFactory(new PropertyValueFactory<>("arrival_time"));
+        carCol.setCellValueFactory(new PropertyValueFactory<>("car_number"));
+        costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
         
+        table.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
+           
         idCol.minWidthProperty().bind(table.widthProperty().multiply(0.05));
         dateCol.minWidthProperty().bind(table.widthProperty().multiply(.1));
         timeCol.minWidthProperty().bind(table.widthProperty().multiply(.1));
@@ -76,7 +88,7 @@ public class Server extends Application {
         costCol.minWidthProperty().bind(table.widthProperty().multiply(.25));
         b1Col.minWidthProperty().bind(table.widthProperty().multiply(.05));
         b2Col.minWidthProperty().bind(table.widthProperty().multiply(.05));
-        table.getColumns().addAll(idCol,dateCol, timeCol, carCol, costCol,b1Col,b2Col);
+        table.getColumns().addAll(idCol,dateCol, timeCol, carCol, costCol,b1Col,b2Col);  
         
         HBox p_hb_logo = new HBox(); 
         p_hb_logo.getChildren().addAll(iv_logo,p_st_lbIncBook);
@@ -88,13 +100,36 @@ public class Server extends Application {
         p_vb_mainPage.setPadding(new Insets(20,20,20,20));
         p_vb_mainPage.getChildren().addAll(p_hb_refreshButton,p_hb_logo,p_vb_center);
         p_vb_mainPage.setSpacing(0);
+        IncomeBook book = new IncomeBook();
+        try {
+            File myObj = new File("C:/Users/Polyxeni/pl_projects/project-motsi-linardos/Server/src/main/java/gr/uop/info.txt");
+            Scanner myReader = new Scanner(myObj);
+            
+            while (myReader.hasNextLine()) {
+              String[] data= myReader.nextLine().split(",");
+            int id=Integer.parseInt(data[0]);
+                String car=data[3];
+              String date=data[1];
+              String time=data[2];
+              int cost=Integer.parseInt(data[4]);
+              System.out.println(data[0]+" "+data[1]+ " "+data[2]+ " "+data[3]+ " "+data[4]);
+              Car car1 = new Car(id,date,time,car,cost);
+              book.addCar(car1);
+              
+            }
+            myReader.close();
+          } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+          }
+          table.setItems(book.getCars()); 
         var scene = new Scene(p_vb_mainPage, 1024, 768);
-        
+
         stage.setScene(scene);
         stage.setMinHeight(768);
         stage.setMinWidth(1024);
         stage.setTitle("CASH DESK");
-        stage.show();
+        stage.show();       
     }
 
     public static void main(String[] args) {
