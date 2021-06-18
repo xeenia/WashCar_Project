@@ -17,7 +17,7 @@ public class IncomeBook {
             
             while (myReader.hasNextLine()) {
               String[] data= myReader.nextLine().split(",");
-            int id=Integer.parseInt(data[0]);
+              String id=data[0];
               String car_number=data[3];
               String date=data[1];
               String time=data[2];
@@ -43,27 +43,33 @@ public class IncomeBook {
         cars.add(car);
     }
 
-    public void deleteCar(int id){
-        
+    public void deleteCar(String id){
         cars.remove(findCar(id));
-    }
+        deleteCarFromFile(id);
 
-    public void updateCar(int id, int cost, String departute_time){
+    }
+    private void deleteCarFromFile(String id){
+       
+    }
+    public void updateCar(String id, int cost, String departute_time){
         cars.get(findCar(id)).setCost(cost);
         cars.get(findCar(id)).setDeparture_time(departute_time);
     }
 
-    public String getCar(int id){
+    public String getCar(String id){
         return cars.get(findCar(id)).getCar_number();
     }
-    private int findCar(int id){
+    private int findCar(String id){
         int i=0;
         for(Car car:cars){
-            if(car.getId()==id){
+            if(car.getId().contains(id)){
                 break;
             }
             i++;
         }
         return i;
+    }
+    public void searchCar(int id){
+
     }
 }

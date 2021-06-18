@@ -3,8 +3,11 @@ package gr.uop;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Observable;
 import java.util.Scanner;
 import javafx.application.Application;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -32,7 +35,8 @@ public class Server extends Application {
         HBox p_hb_logo = createLogo();
         TableView table = createTable();
         VBox p_vb_center = new VBox();
-        p_vb_center.getChildren().addAll(createSearchField(),table);
+        TextField tx = createSearchField();
+        p_vb_center.getChildren().addAll(tx,table);
         VBox p_vb_mainPage = new VBox(); 
         p_vb_mainPage.setStyle("-fx-background-color:#abdbe3;");
         p_vb_mainPage.setSpacing(15);
@@ -49,7 +53,25 @@ public class Server extends Application {
         stage.setMinHeight(768);
         stage.setMinWidth(1024);
         stage.setTitle("CASH DESK");
-        stage.show();       
+        stage.show();   
+        FilteredList<Car> filteredlist = new FilteredList<>(book.getCars(), b-> true);
+        tx.textProperty().addListener((Observable, oldValue, newValue)->{
+          filteredlist.setPredicate(car -> {
+            if(newValue == null || newValue.isEmpty()){
+              return true;
+            }
+
+            String text = newValue.toLowerCase();
+            System.out.println("yoo "+ text +" syn "+car.getCar_number() + "gaga "+car.getCar_number().indexOf(text));
+            if(car.getId().toLowerCase().indexOf(text) != -1){
+              return true;
+            }else if(car.getCar_number().indexOf(text)!= -1){
+              System.out.println("yoo2 "+ car.getCar_number());
+              return true;
+            }else return false;
+          });
+        });
+        table.setItems(filteredlist);
     }
 
     public HBox createLogo(){
@@ -89,7 +111,7 @@ public class Server extends Application {
   
     public TextField createSearchField(){
           TextField tf_search = new TextField();
-          tf_search.setPromptText("Search for time, date or Car Number");
+          tf_search.setPromptText("Search for ID or Car Number");
           tf_search.setPrefWidth(210);
           BorderPane p_bp_search = new BorderPane();
           p_bp_search.setLeft(tf_search);         
@@ -99,7 +121,7 @@ public class Server extends Application {
       TableView table = new TableView<>();
       table.setEditable(true);
       table.setPrefHeight(Integer.MAX_VALUE);
-      TableColumn idCol = new TableColumn<Car,Integer>("ID");
+      TableColumn idCol = new TableColumn<Car,String>("ID");
       TableColumn dateCol = new TableColumn<Car,String>("Date");
       TableColumn timeCol = new TableColumn<Car,String>("Time");
       TableColumn carCol = new TableColumn<Car,String>("Car Number");
