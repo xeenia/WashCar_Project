@@ -40,33 +40,11 @@ public class Server extends Application {
         p_vb_mainPage.getChildren().addAll(createRefreshButton(),p_hb_logo,p_vb_center);
         p_vb_mainPage.setSpacing(0);
 
-
         IncomeBook book = new IncomeBook();
-        try {
-            File myObj = new File("C:/Users/Polyxeni/pl_projects/project-motsi-linardos/Server/src/main/java/gr/uop/info.txt");
-            Scanner myReader = new Scanner(myObj);
-            
-            while (myReader.hasNextLine()) {
-              String[] data= myReader.nextLine().split(",");
-            int id=Integer.parseInt(data[0]);
-              String car=data[3];
-              String date=data[1];
-              String time=data[2];
-              int cost=Integer.parseInt(data[4]);
-              System.out.println(data[0]+" "+data[1]+ " "+data[2]+ " "+data[3]+ " "+data[4]);
-              Car car1 = new Car(id,date,time,car,cost);
-              book.addCar(car1);
-            }
-            myReader.close();
-          } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-          }
-          table.setItems(book.getCars()); 
-          book.addCar(new Car(100,"30-30-30","20:21","HNM2345",100));
-          book.deleteCar(3);
-        var scene = new Scene(p_vb_mainPage, 1024, 768);
+        
+        table.setItems(book.getCars()); 
 
+        var scene = new Scene(p_vb_mainPage, 1024, 768);
         stage.setScene(scene);
         stage.setMinHeight(768);
         stage.setMinWidth(1024);
