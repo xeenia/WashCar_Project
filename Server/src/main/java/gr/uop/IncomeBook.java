@@ -12,7 +12,7 @@ public class IncomeBook {
 
     IncomeBook(){
         try {
-            File myObj = new File("C:/Users/Polyxeni/pl_projects/project-motsi-linardos/Server/src/main/java/gr/uop/info.txt");
+            File myObj = new File("Server/src/main/java/gr/uop/txtFiles/info.txt");
             Scanner myReader = new Scanner(myObj);
             
             while (myReader.hasNextLine()) {
