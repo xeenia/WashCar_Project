@@ -3,22 +3,27 @@ package gr.uop;
 
 import java.util.Map;
 import java.util.TreeMap;
-
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -27,6 +32,9 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class Client extends Application {
+
+String stringbuilder ="";
+TableView<Product> listtable;
 
     @Override
     public void start(Stage stage) {
@@ -159,23 +167,53 @@ public class Client extends Application {
       stage.show();
 
       for(Map.Entry<String,Button> m : buttons.entrySet()){
+        
         m.getValue().setOnAction((e) -> {
-          text.textProperty().addListener((observable, oldValue, newValue) ->{
-            newValue = text.getText();
-            if(!text.getText().equals("Enter") || !text.getText().equals("Backspace")){
-              text.setText(oldValue + newValue);
-              oldValue =text.getText(); 
-              System.out.println("Works");
+          
+          if(m.getKey().equals("Enter")){
+            Alert alert = new Alert(AlertType.CONFIRMATION, "Your licence plate is " + stringbuilder + "\nTo continue press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+            alert.showAndWait();
+            Stage second_stage = new Stage();
+            if (alert.getResult() == ButtonType.YES) {
+              HBox table_box = productlistWindow();
+              VBox scene_box = new VBox();
+              VBox bottom_box = new VBox();
+
+              Button cancel_button = new Button("Cancel");
+              TextField price_textfield = new TextField();
+              price_textfield.setMaxSize(200, 40);
+              price_textfield.setPromptText("The total price is shown here");
+              price_textfield.setEditable(false);
+
+              bottom_box.getChildren().addAll(price_textfield, cancel_button);
+              bottom_box.setAlignment(Pos.CENTER);
+              bottom_box.setPadding(new Insets(10, 0, 5, 0));
+              bottom_box.setSpacing(10);
+
+              scene_box.getChildren().addAll(table_box, bottom_box);
+              scene_box.setStyle("-fx-background-color:#abdbe3;");
+
+              var scene2 = new Scene(scene_box, 700, 400); 
+              second_stage.setScene(scene2);
+              second_stage.setMinWidth(700);
+              second_stage.setMinHeight(400);
+              second_stage.setTitle("SERVICES");
+              stage.hide();
+              second_stage.show();
+                  
+              System.out.println(price_textfield.getWidth());
+              System.out.println(price_textfield.getHeight());
             }
-          }); 
-          // String temp ="";
-          // temp = temp + m.getKey();
-          // text.setText(m.getKey());
-          // System.out.println(text.getText());
+          }else{
+            text.setText(m.getKey());
+            System.out.println(text.getText());
+          }
+          stringbuilder+=text.getText();
+          System.out.println(stringbuilder); 
+          text.setText(stringbuilder);
         });
       }  
     }  
-
     public HBox createLogo(){
       var lb_incBook = new Label("Income Book");
       lb_incBook.setTextFill(Color.web("#FFFFFF"));
@@ -191,7 +229,77 @@ public class Client extends Application {
       p_hb_logo.getChildren().addAll(iv_logo,p_st_lbIncBook);
       return p_hb_logo;
     }
+    public ObservableList<Product> getProduct(){
+      ObservableList<Product> products = FXCollections.observableArrayList();
+      products.add(new Product(1, "Πλύσιμο εξωτερικό", "7", "8", "6"));
+      products.add(new Product(2, "Πλύσιμο εσωτερικό", "6", "7", "-"));
+      products.add(new Product(3, "Πλύσιμο εξωτ.+εσωτ.", "12", "14", "-"));
+      products.add(new Product(4, "Πλύσιμο εξωτ. σπέσιαλ", "9", "10", "8"));
+      products.add(new Product(5, "Πλύσιμο εσωτ. σπέσιαλ", "8", "9", "-"));
+      products.add(new Product(6, "Πλύσιμο εξωτ. + εσωτ. σπέσιαλ", "15", "17", "-"));
+      products.add(new Product(7, "Βιολογικός καθαρισμός εσωτ.", "80", "80", "-"));
+      products.add(new Product(8, "Κέρωμα‐Γυάλισμα", "80", "90", "40"));
+      products.add(new Product(9, "Καθαρισμός κινητήρα", "20", "20", "10"));
+      products.add(new Product(10, "Πλύσιμο σασί", "3", "3", "-"));
+      return products;
+    }
+    public HBox productlistWindow(){
 
+      //Id column
+      TableColumn<Product, String> idColumn = new TableColumn<>("ID");
+      idColumn.setMinWidth(30);
+      idColumn.setSortable(false);
+      idColumn.setCellValueFactory(new PropertyValueFactory<>("product_id"));
+
+      //Name column
+      TableColumn<Product, String> nameColumn = new TableColumn<>("Product");
+      nameColumn.setMinWidth(200);
+      nameColumn.setSortable(false);
+      nameColumn.setCellValueFactory(new PropertyValueFactory<>("product_name"));
+      
+      //carprice column
+      TableColumn<Product, String> carpriceColumn = new TableColumn<>("Car Price");
+      carpriceColumn.setMinWidth(100);
+      carpriceColumn.setSortable(false);
+      carpriceColumn.setCellValueFactory(new PropertyValueFactory<>("car_price"));
+
+      //jeepprice column
+      TableColumn<Product, String> jeeppriceColumn = new TableColumn<>("Jeep Price");
+      jeeppriceColumn.setMinWidth(100);
+      jeeppriceColumn.setSortable(false);
+      jeeppriceColumn.setCellValueFactory(new PropertyValueFactory<>("jeep_price"));
+
+      //motorbikeprice column
+      TableColumn<Product, String> motorbikepriceColumn = new TableColumn<>("Motorbike Price");
+      motorbikepriceColumn.setMinWidth(100);
+      motorbikepriceColumn.setSortable(false);
+      motorbikepriceColumn.setCellValueFactory(new PropertyValueFactory<>("motorbike_price"));
+
+      listtable = new TableView<>();
+      //listtable.setItems(filteredData);
+      listtable.setItems(getProduct());
+      listtable.getColumns().addAll(idColumn, nameColumn, carpriceColumn, jeeppriceColumn, motorbikepriceColumn);
+      //without this line of code we get and extra empty column which we dont need
+      listtable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    
+      VBox radiobuttonsbox = new VBox();
+      ObservableList<RadioButton> radiobuttons  = FXCollections.observableArrayList();
+      for(int i=0; i<10; i++){
+        String s = String.valueOf(i+1);
+        RadioButton rb = new RadioButton(s);
+        radiobuttons.add(i, rb);
+        radiobuttonsbox.getChildren().add(rb);
+      }
+      radiobuttonsbox.setPadding(new Insets(26, 0, 0, 5));
+      radiobuttonsbox.setSpacing(7);
+
+      HBox box = new HBox();
+      box.getChildren().addAll(listtable,radiobuttonsbox);
+      box.setAlignment(Pos.CENTER);
+
+      return box; 
+    }
+  
     public static void main(String[] args) {
         launch(args);
     }
