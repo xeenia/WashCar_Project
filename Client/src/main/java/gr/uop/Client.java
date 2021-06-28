@@ -6,7 +6,6 @@ import java.util.TreeMap;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,7 +15,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.TableView; 
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -167,46 +166,60 @@ TableView<Product> listtable;
       stage.show();
 
       for(Map.Entry<String,Button> m : buttons.entrySet()){
-        
+
         m.getValue().setOnAction((e) -> {
-          
           if(m.getKey().equals("Enter")){
-            Alert alert = new Alert(AlertType.CONFIRMATION, "Your licence plate is " + stringbuilder + "\nTo continue press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
-            alert.showAndWait();
-            Stage second_stage = new Stage();
-            if (alert.getResult() == ButtonType.YES) {
-              HBox table_box = productlistWindow();
-              VBox scene_box = new VBox();
-              VBox bottom_box = new VBox();
+            if(!text.getText().isBlank() && text.getText().length()>=2){
+              Alert alert = new Alert(AlertType.CONFIRMATION, "Your licence plate is " + stringbuilder + "\nTo continue press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+              alert.showAndWait();
+              Stage second_stage = new Stage();
+              if (alert.getResult() == ButtonType.YES) {
+                HBox table_box = productlistWindow();
+                VBox scene_box = new VBox();
+                VBox bottom_box = new VBox();
 
-              Button cancel_button = new Button("Cancel");
-              TextField price_textfield = new TextField();
-              price_textfield.setMaxSize(200, 40);
-              price_textfield.setPromptText("The total price is shown here");
-              price_textfield.setEditable(false);
+                Button cancel_button = new Button("Cancel");
+                TextField price_textfield = new TextField();
+                price_textfield.setMaxSize(200, 40);
+                price_textfield.setPromptText("The total price is shown here");
+                price_textfield.setEditable(false);
 
-              bottom_box.getChildren().addAll(price_textfield, cancel_button);
-              bottom_box.setAlignment(Pos.CENTER);
-              bottom_box.setPadding(new Insets(10, 0, 5, 0));
-              bottom_box.setSpacing(10);
+                bottom_box.getChildren().addAll(price_textfield, cancel_button);
+                bottom_box.setAlignment(Pos.CENTER);
+                bottom_box.setPadding(new Insets(10, 0, 5, 0));
+                bottom_box.setSpacing(10);
 
-              scene_box.getChildren().addAll(table_box, bottom_box);
-              scene_box.setStyle("-fx-background-color:#abdbe3;");
+                scene_box.getChildren().addAll(table_box, bottom_box);
+                scene_box.setStyle("-fx-background-color:#abdbe3;");
 
-              var scene2 = new Scene(scene_box, 700, 400); 
-              second_stage.setScene(scene2);
-              second_stage.setMinWidth(700);
-              second_stage.setMinHeight(400);
-              second_stage.setTitle("SERVICES");
-              stage.hide();
-              second_stage.show();
-                  
-              System.out.println(price_textfield.getWidth());
-              System.out.println(price_textfield.getHeight());
+                var scene2 = new Scene(scene_box, 700, 400); 
+                second_stage.setScene(scene2);
+                second_stage.setMinWidth(700);
+                second_stage.setMinHeight(400);
+                second_stage.setTitle("SERVICES");
+                stage.hide();
+                second_stage.show();
+              }else if(alert.getResult() == ButtonType.NO || alert.getResult() == ButtonType.CANCEL){
+                stringbuilder = "";
+              }
+            }else{
+                Alert warning_alert = new Alert(AlertType.CONFIRMATION, "Please enter a valid license plate" , ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+                warning_alert.showAndWait();
+                stringbuilder = "";
             }
           }else{
-            text.setText(m.getKey());
-            System.out.println(text.getText());
+            if(!m.getKey().equals("Enter") && !m.getKey().equals("Backspace")){
+              text.setText(m.getKey());
+              System.out.println(text.getText());
+            }else if (m.getKey().equals("Backspace")){
+              String result = null;
+              if ((text.getText() != null) && (text.getText().length() > 0)) {
+                result = text.getText().substring(0, text.getText().length() - 1);
+                stringbuilder = "";
+                text.setText("");
+                text.setText(result);
+              }
+            }
           }
           stringbuilder+=text.getText();
           System.out.println(stringbuilder); 
@@ -214,6 +227,7 @@ TableView<Product> listtable;
         });
       }  
     }  
+
     public HBox createLogo(){
       var lb_incBook = new Label("Income Book");
       lb_incBook.setTextFill(Color.web("#FFFFFF"));
