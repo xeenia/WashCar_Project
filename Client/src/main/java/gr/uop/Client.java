@@ -28,6 +28,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Client extends Application {
@@ -35,6 +36,16 @@ public class Client extends Application {
 String stringbuilder ="";
 TableView<Product> listtable;
 int price = 0;
+Button car_button = new Button();
+Button jeep_button = new Button();
+Button moto_button = new Button();
+Stage second_stage = new Stage();
+
+TableColumn<Product, String> idColumn ;
+TableColumn<Product, String> nameColumn ;
+TableColumn<Product, String> carpriceColumn ;
+TableColumn<Product, String> jeeppriceColumn ;
+TableColumn<Product, String> motorbikepriceColumn ;
 
     @Override
     public void start(Stage stage) {
@@ -176,7 +187,7 @@ int price = 0;
             if(!text.getText().isBlank() && text.getText().length()>=2){
               Alert alert = new Alert(AlertType.CONFIRMATION, "Your licence plate is " + stringbuilder + "\nTo continue press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
               alert.showAndWait();
-              Stage second_stage = new Stage();
+              
               if (alert.getResult() == ButtonType.YES) {
                 HBox table_box = productlistWindow();
                 VBox scene_box = new VBox();
@@ -237,6 +248,15 @@ int price = 0;
                 warning_alert.showAndWait();
                 stringbuilder = "";
             }
+            car_button.setOnAction(car->{
+              buttonPressed(car_button);
+            });
+            jeep_button.setOnAction(jeep->{
+              buttonPressed(jeep_button);
+            });
+            moto_button.setOnAction(moto->{
+              buttonPressed(moto_button);
+            });
           }else{
             if(!m.getKey().equals("Enter") && !m.getKey().equals("Backspace")){
               text.setText(m.getKey());
@@ -293,37 +313,36 @@ int price = 0;
     public HBox productlistWindow(){
 
       //Id column
-      TableColumn<Product, String> idColumn = new TableColumn<>("ID");
+      idColumn = new TableColumn<>("ID");
       idColumn.setMinWidth(30);
       idColumn.setSortable(false);
       idColumn.setCellValueFactory(new PropertyValueFactory<>("product_id"));
 
       //Name column
-      TableColumn<Product, String> nameColumn = new TableColumn<>("Product");
+      nameColumn = new TableColumn<>("Product");
       nameColumn.setMinWidth(200);
       nameColumn.setSortable(false);
       nameColumn.setCellValueFactory(new PropertyValueFactory<>("product_name"));
       
       //carprice column
-      TableColumn<Product, String> carpriceColumn = new TableColumn<>("Car Price");
+      carpriceColumn = new TableColumn<>("Car Price");
       carpriceColumn.setMinWidth(100);
       carpriceColumn.setSortable(false);
       carpriceColumn.setCellValueFactory(new PropertyValueFactory<>("car_price"));
 
       //jeepprice column
-      TableColumn<Product, String> jeeppriceColumn = new TableColumn<>("Jeep Price");
+      jeeppriceColumn = new TableColumn<>("Jeep Price");
       jeeppriceColumn.setMinWidth(100);
       jeeppriceColumn.setSortable(false);
       jeeppriceColumn.setCellValueFactory(new PropertyValueFactory<>("jeep_price"));
 
       //motorbikeprice column
-      TableColumn<Product, String> motorbikepriceColumn = new TableColumn<>("Motorbike Price");
+      motorbikepriceColumn = new TableColumn<>("Motorbike Price");
       motorbikepriceColumn.setMinWidth(100);
       motorbikepriceColumn.setSortable(false);
       motorbikepriceColumn.setCellValueFactory(new PropertyValueFactory<>("motorbike_price"));
 
       listtable = new TableView<>();
-      //listtable.setItems(filteredData);
       listtable.setItems(getProduct());
       listtable.getColumns().addAll(idColumn, nameColumn, carpriceColumn, jeeppriceColumn, motorbikepriceColumn);
       //without this line of code we get and extra empty column which we dont need
@@ -331,8 +350,7 @@ int price = 0;
       listtable.setEditable(false);  
       listtable.setMouseTransparent(true);
       listtable.setFocusTraversable(false);
-    
-      Button car_button = new Button();
+      
       car_button.setPrefSize(50, 50);
       car_button.setPadding(Insets.EMPTY);
       Image car_logo = new Image(Client.class.getResourceAsStream("img/car_logo.jpg"));
@@ -342,7 +360,7 @@ int price = 0;
       ivcar_logo.setFitWidth(50);
       car_button.setGraphic(ivcar_logo);
 
-      Button jeep_button = new Button();
+     
       jeep_button.setPrefSize(50, 50);
       jeep_button.setPadding(Insets.EMPTY);
       Image jeep_logo = new Image(Client.class.getResourceAsStream("img/jeep_logo.png"));
@@ -352,7 +370,7 @@ int price = 0;
       ivjeep_logo.setFitWidth(50);
       jeep_button.setGraphic(ivjeep_logo);
       
-      Button moto_button = new Button();
+      
       moto_button.setPrefSize(50, 50);
       moto_button.setPadding(Insets.EMPTY);
       Image moto_logo = new Image(Client.class.getResourceAsStream("img/moto_logo.png"));
@@ -373,7 +391,97 @@ int price = 0;
 
       return box; 
     }
-  
+
+    public void buttonPressed(Button button){
+      if(button.getGraphic().equals(car_button.getGraphic())){
+        carScene();
+      }else if(button.getGraphic().equals(jeep_button.getGraphic())){
+        jeepScene();
+      }else if(button.getGraphic().equals(moto_button.getGraphic())){
+        motoScene();
+      }
+    }
+
+    public void carScene() {
+
+      TableView carlist = new TableView<>();
+      carlist.setItems(getProduct());
+      carlist.getColumns().addAll(idColumn, nameColumn, carpriceColumn);
+      //without this line of code we get and extra empty column which we dont need
+      carlist.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+      carlist.setEditable(false);  
+      carlist.setMouseTransparent(true);
+      carlist.setFocusTraversable(false);
+
+      HBox carbox = new HBox();
+      carbox.getChildren().addAll(carlist);
+
+      Stage car_stage = new Stage();
+      var carscene = new Scene(carbox,500,300);
+
+      car_stage.setScene(carscene);
+      car_stage.setTitle("CAR SERVICES");
+      //switch focus to new window
+      car_stage.initModality(Modality.APPLICATION_MODAL);
+      car_stage.show();
+      //prevent full screen
+      car_stage.setResizable(false);
+
+    }
+
+    public void jeepScene() {
+
+      TableView jeeplist = new TableView<>();
+      jeeplist.setItems(getProduct());
+      jeeplist.getColumns().addAll(idColumn, nameColumn, jeeppriceColumn);
+      //without this line of code we get and extra empty column which we dont need
+      jeeplist.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+      jeeplist.setEditable(false);  
+      jeeplist.setMouseTransparent(true);
+      jeeplist.setFocusTraversable(false);
+
+      HBox jeepbox = new HBox();
+      jeepbox.getChildren().addAll(jeeplist);
+
+      Stage jeep_stage = new Stage();
+      var jeepscene = new Scene(jeepbox,500,300);
+
+      jeep_stage.setScene(jeepscene);
+      jeep_stage.setTitle("JEEP SERVICES");
+      //switch focus to new window
+      jeep_stage.initModality(Modality.APPLICATION_MODAL);
+      jeep_stage.show();
+      //prevent full screen
+      jeep_stage.setResizable(false);
+      
+    }
+
+    public void motoScene() {
+      
+      TableView motolist = new TableView<>();
+      motolist.setItems(getProduct());
+      motolist.getColumns().addAll(idColumn, nameColumn, motorbikepriceColumn);
+      //without this line of code we get and extra empty column which we dont need
+      motolist.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+      motolist.setEditable(false);  
+      motolist.setMouseTransparent(true);
+      motolist.setFocusTraversable(false);
+
+      HBox motobox = new HBox();
+      motobox.getChildren().addAll(motolist);
+
+      Stage moto_stage = new Stage();
+      var motoscene = new Scene(motobox,500,300);
+
+      moto_stage.setScene(motoscene);
+      moto_stage.setTitle("MOTORBIKE SERVICES");
+      //switch focus to new window
+      moto_stage.initModality(Modality.APPLICATION_MODAL);
+      moto_stage.show();
+      //prevent full screen
+      moto_stage.setResizable(false);
+      
+    }
     public static void main(String[] args) {
         launch(args);
     }
