@@ -34,6 +34,7 @@ public class Client extends Application {
 
 String stringbuilder ="";
 TableView<Product> listtable;
+int price = 0;
 
     @Override
     public void start(Stage stage) {
@@ -44,6 +45,9 @@ TableView<Product> listtable;
       TextField text = new TextField();
       text.setPromptText("Please enter your licence plate");
       text.setPrefSize(200, 40);
+      text.setEditable(false);
+      text.setMouseTransparent(true);
+      text.setFocusTraversable(false);
 
       Button enter_button = new Button("Enter");
       enter_button.setPrefSize(80, 40);
@@ -131,7 +135,7 @@ TableView<Product> listtable;
       zero_button.setPrefSize(130, 40);
 
       buttons.put("Backspace", backspace_button);
-      buttons.put("", space_button);
+      buttons.put(" ", space_button);
       buttons.put("0", zero_button);
       buttons.put("Enter", enter_button);
 
@@ -177,16 +181,25 @@ TableView<Product> listtable;
                 HBox table_box = productlistWindow();
                 VBox scene_box = new VBox();
                 VBox bottom_box = new VBox();
+                HBox button_box = new HBox();
 
+                Button checkout_button = new Button ("Ckeckout");
                 Button cancel_button = new Button("Cancel");
+                
                 TextField price_textfield = new TextField();
                 price_textfield.setMaxSize(200, 40);
                 price_textfield.setPromptText("The total price is shown here");
                 price_textfield.setEditable(false);
+                price_textfield.setMouseTransparent(true);
+                price_textfield.setFocusTraversable(false);
 
-                bottom_box.getChildren().addAll(price_textfield, cancel_button);
+                button_box.getChildren().addAll(checkout_button,cancel_button);
+                button_box.setAlignment(Pos.CENTER);
+                button_box.setSpacing(10);
+
+                bottom_box.getChildren().addAll(price_textfield, button_box);
                 bottom_box.setAlignment(Pos.CENTER);
-                bottom_box.setPadding(new Insets(10, 0, 5, 0));
+                bottom_box.setPadding(new Insets(10, 0, 10, 0));
                 bottom_box.setSpacing(10);
 
                 scene_box.getChildren().addAll(table_box, bottom_box);
@@ -194,11 +207,28 @@ TableView<Product> listtable;
 
                 var scene2 = new Scene(scene_box, 700, 400); 
                 second_stage.setScene(scene2);
-                second_stage.setMinWidth(700);
+                second_stage.setMinWidth(800);
                 second_stage.setMinHeight(400);
                 second_stage.setTitle("SERVICES");
                 stage.hide();
                 second_stage.show();
+                //checkout and cancel buttons same size
+                cancel_button.setPrefWidth(checkout_button.getWidth());
+                System.out.println(stringbuilder);
+                second_stage.setOnCloseRequest(event ->{
+                  stringbuilder = "";
+                  //text.setText("");
+                  second_stage.hide();
+                  stage.show();
+                });
+                cancel_button.setOnAction(c->{
+                  Alert cancel_alert = new Alert(AlertType.CONFIRMATION,"To get back to main menu press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+                  cancel_alert.showAndWait();
+                  if (cancel_alert.getResult() == ButtonType.YES) {
+                    second_stage.hide();
+                    stage.show();
+                  }
+                });
               }else if(alert.getResult() == ButtonType.NO || alert.getResult() == ButtonType.CANCEL){
                 stringbuilder = "";
               }
@@ -221,9 +251,12 @@ TableView<Product> listtable;
               }
             }
           }
-          stringbuilder+=text.getText();
-          System.out.println(stringbuilder); 
-          text.setText(stringbuilder);
+          //fixed a bug where after closing second window the license plate was added to itself
+          if(!stringbuilder.equals(text.getText()) || stringbuilder.length()<2){
+            stringbuilder+=text.getText();
+            System.out.println(stringbuilder); 
+            text.setText(stringbuilder);
+          }
         });
       }  
     }  
@@ -295,20 +328,47 @@ TableView<Product> listtable;
       listtable.getColumns().addAll(idColumn, nameColumn, carpriceColumn, jeeppriceColumn, motorbikepriceColumn);
       //without this line of code we get and extra empty column which we dont need
       listtable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+      listtable.setEditable(false);  
+      listtable.setMouseTransparent(true);
+      listtable.setFocusTraversable(false);
     
-      VBox radiobuttonsbox = new VBox();
-      ObservableList<RadioButton> radiobuttons  = FXCollections.observableArrayList();
-      for(int i=0; i<10; i++){
-        String s = String.valueOf(i+1);
-        RadioButton rb = new RadioButton(s);
-        radiobuttons.add(i, rb);
-        radiobuttonsbox.getChildren().add(rb);
-      }
-      radiobuttonsbox.setPadding(new Insets(26, 0, 0, 5));
-      radiobuttonsbox.setSpacing(7);
+      Button car_button = new Button();
+      car_button.setPrefSize(50, 50);
+      car_button.setPadding(Insets.EMPTY);
+      Image car_logo = new Image(Client.class.getResourceAsStream("img/car_logo.jpg"));
+      ImageView ivcar_logo = new ImageView(car_logo);
+      //ivcar_logo.setPreserveRatio(true);
+      ivcar_logo.setFitHeight(50);
+      ivcar_logo.setFitWidth(50);
+      car_button.setGraphic(ivcar_logo);
+
+      Button jeep_button = new Button();
+      jeep_button.setPrefSize(50, 50);
+      jeep_button.setPadding(Insets.EMPTY);
+      Image jeep_logo = new Image(Client.class.getResourceAsStream("img/jeep_logo.png"));
+      ImageView ivjeep_logo = new ImageView(jeep_logo);
+      //ivjeep_logo.setPreserveRatio(true);
+      ivjeep_logo.setFitHeight(50);
+      ivjeep_logo.setFitWidth(50);
+      jeep_button.setGraphic(ivjeep_logo);
+      
+      Button moto_button = new Button();
+      moto_button.setPrefSize(50, 50);
+      moto_button.setPadding(Insets.EMPTY);
+      Image moto_logo = new Image(Client.class.getResourceAsStream("img/moto_logo.png"));
+      ImageView ivmoto_logo = new ImageView(moto_logo);
+      //ivjeep_logo.setPreserveRatio(true);
+      ivmoto_logo.setFitHeight(50);
+      ivmoto_logo.setFitWidth(50);
+      moto_button.setGraphic(ivmoto_logo);
+      
+      VBox button_box = new VBox();
+      button_box.setPadding(new Insets(70, 10, 0, 10));
+      button_box.setSpacing(10);
+      button_box.getChildren().addAll(car_button,jeep_button,moto_button);
 
       HBox box = new HBox();
-      box.getChildren().addAll(listtable,radiobuttonsbox);
+      box.getChildren().addAll(listtable,button_box);
       box.setAlignment(Pos.CENTER);
 
       return box; 
