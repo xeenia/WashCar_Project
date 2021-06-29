@@ -520,10 +520,6 @@ TableColumn<Product, String> motorbikepriceColumn ;
       if(button.getGraphic().equals(car_button.getGraphic())){
         for(RadioButton b  : radiobuttons){
           b.setOnAction((k)->{
-            //reactivates disabled radiobuttons
-            for(RadioButton rb  : radiobuttons){
-              rb.setDisable(false);
-            }
             switch (b.getText()) {
               case "1":
               //disables radiobuttons
@@ -551,7 +547,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
                 //reactivates disabled radiobuttons
                 if(!b.isSelected()){
                   for(RadioButton rb  : radiobuttons){
-                    if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
+                    if(rb.getText().equals("3") || rb.getText().equals("5") || rb.getText().equals("6")){
                       rb.setDisable(false);
                     }
                   }
@@ -567,7 +563,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
                 //reactivates disabled radiobuttons
                 if(!b.isSelected()){
                   for(RadioButton rb  : radiobuttons){
-                    if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
+                    if(rb.getText().equals("1") || rb.getText().equals("2") || rb.getText().equals("4") || rb.getText().equals("5") || rb.getText().equals("6")){
                       rb.setDisable(false);
                     }
                   }
@@ -583,7 +579,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
                 //reactivates disabled radiobuttons
                 if(!b.isSelected()){
                   for(RadioButton rb  : radiobuttons){
-                    if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
+                    if(rb.getText().equals("1") || rb.getText().equals("3") || rb.getText().equals("6")){
                       rb.setDisable(false);
                     }
                   }
@@ -599,7 +595,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
                 //reactivates disabled radiobuttons
                 if(!b.isSelected()){
                   for(RadioButton rb  : radiobuttons){
-                    if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
+                    if(rb.getText().equals("2") || rb.getText().equals("3") || rb.getText().equals("6")){
                       rb.setDisable(false);
                     }
                   }
@@ -615,7 +611,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
                 //reactivates disabled radiobuttons
                 if(!b.isSelected()){
                   for(RadioButton rb  : radiobuttons){
-                    if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
+                    if(rb.getText().equals("1") || rb.getText().equals("2") || rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("5")){
                       rb.setDisable(false);
                     }
                   }
