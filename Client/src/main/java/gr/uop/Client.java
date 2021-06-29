@@ -40,6 +40,10 @@ Button car_button = new Button();
 Button jeep_button = new Button();
 Button moto_button = new Button();
 Stage second_stage = new Stage();
+TextField price_textfield = new TextField();
+TextField carpricefield = new TextField();
+TextField jeeppricefield = new TextField();
+TextField motopricefield = new TextField();
 
 TableColumn<Product, String> idColumn ;
 TableColumn<Product, String> nameColumn ;
@@ -199,7 +203,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
                 
                 Button cancel_button = new Button("Cancel");
                 
-                TextField price_textfield = new TextField();
+                
                 price_textfield.setMaxSize(200, 40);
                 price_textfield.setPromptText("The total price is shown here");
                 price_textfield.setEditable(false);
@@ -216,6 +220,8 @@ TableColumn<Product, String> motorbikepriceColumn ;
                 bottom_box.setSpacing(10);
 
                 scene_box.getChildren().addAll(table_box, bottom_box);
+                scene_box.setAlignment(Pos.CENTER);
+                scene_box.setPadding(new Insets(10, 0, 0, 0));
                 scene_box.setStyle("-fx-background-color:#abdbe3;");
 
                 var scene2 = new Scene(scene_box, 700, 400); 
@@ -426,13 +432,33 @@ TableColumn<Product, String> motorbikepriceColumn ;
       carlist.setMouseTransparent(true);
       carlist.setFocusTraversable(false);
 
+      carpricefield.setPromptText("Services price");
+      carpricefield.setEditable(false);
+      carpricefield.setMouseTransparent(true);
+      carpricefield.setFocusTraversable(false);
+
+      Button carconfirmbutton = new Button("Confirm");
+
       VBox radiobuttons = radiobuttonbox(button);
 
       HBox carbox = new HBox();
+      carbox.setAlignment(Pos.CENTER);
       carbox.getChildren().addAll(carlist,radiobuttons);
+
+      HBox carpricebox = new HBox();
+      carpricebox.setAlignment(Pos.CENTER);
+      carpricebox.setPadding(new Insets(10, 0, 0, 0));
+      carpricebox.setSpacing(10);
+      carpricebox.getChildren().addAll(carpricefield,carconfirmbutton);
+
+      VBox car = new VBox();
+      car.setStyle("-fx-background-color:#abdbe3;");
+      car.setPadding(new Insets(10, 0, 10, 0));
+      car.setAlignment(Pos.CENTER);
+      car.getChildren().addAll(carbox, carpricebox);
       
       Stage car_stage = new Stage();
-      var carscene = new Scene(carbox,500,300);
+      var carscene = new Scene(car,500,350);
 
       car_stage.setScene(carscene);
       car_stage.setTitle("CAR SERVICES");
@@ -441,6 +467,25 @@ TableColumn<Product, String> motorbikepriceColumn ;
       car_stage.show();
       //prevent full screen
       car_stage.setResizable(false);
+
+      //send total price to second stage plus reseting price
+      carconfirmbutton.setOnAction(e->{
+        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ price + "€"  + "\nIf you want to continue to checkout press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        confirm_alert.showAndWait();
+        if (confirm_alert.getResult() == ButtonType.YES) {
+          price_textfield.setText(String.valueOf(price));
+          price = 0;
+          car_stage.close();
+          second_stage.show();
+          }
+      });
+
+      //reset price on close
+      car_stage.setOnCloseRequest(event ->{
+        price=0;
+        car_stage.close();
+        second_stage.show();
+      });
     }
 
     public void jeepScene(Button button) {
@@ -454,13 +499,33 @@ TableColumn<Product, String> motorbikepriceColumn ;
       jeeplist.setMouseTransparent(true);
       jeeplist.setFocusTraversable(false);
 
+      jeeppricefield.setPromptText("Services price");
+      jeeppricefield.setEditable(false);
+      jeeppricefield.setMouseTransparent(true);
+      jeeppricefield.setFocusTraversable(false);
+
+      Button jeepconfirmbutton = new Button("Confirm");
+
       VBox radiobuttons = radiobuttonbox(button);
 
       HBox jeepbox = new HBox();
+      jeepbox.setAlignment(Pos.CENTER);
       jeepbox.getChildren().addAll(jeeplist,radiobuttons);
 
+      HBox jeeppricebox = new HBox();
+      jeeppricebox.setAlignment(Pos.CENTER);
+      jeeppricebox.setPadding(new Insets(10, 0, 0, 0));
+      jeeppricebox.setSpacing(10);
+      jeeppricebox.getChildren().addAll(jeeppricefield,jeepconfirmbutton);
+      
+      VBox jeep = new VBox();
+      jeep.setStyle("-fx-background-color:#abdbe3;");
+      jeep.setPadding(new Insets(10, 0, 10, 0));
+      jeep.setAlignment(Pos.CENTER);
+      jeep.getChildren().addAll(jeepbox, jeeppricebox);
+      
       Stage jeep_stage = new Stage();
-      var jeepscene = new Scene(jeepbox,500,300);
+      var jeepscene = new Scene(jeep,500,350);
 
       jeep_stage.setScene(jeepscene);
       jeep_stage.setTitle("JEEP SERVICES");
@@ -469,6 +534,25 @@ TableColumn<Product, String> motorbikepriceColumn ;
       jeep_stage.show();
       //prevent full screen
       jeep_stage.setResizable(false);
+
+      //send total price to second stage plus reseting price
+      jeepconfirmbutton.setOnAction(e->{
+        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ price + "€"  + "\nIf you want to continue to checkout press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        confirm_alert.showAndWait();
+        if (confirm_alert.getResult() == ButtonType.YES) {
+          price_textfield.setText(String.valueOf(price));
+          price = 0;
+          jeep_stage.close();
+          second_stage.show();
+          }
+      });
+
+      //reset price on close
+      jeep_stage.setOnCloseRequest(event ->{
+        price=0;
+        jeep_stage.close();
+        second_stage.show();
+      });
       
     }
 
@@ -483,16 +567,36 @@ TableColumn<Product, String> motorbikepriceColumn ;
       motolist.setMouseTransparent(true);
       motolist.setFocusTraversable(false);
 
+      motopricefield.setPromptText("Services price");
+      motopricefield.setEditable(false);
+      motopricefield.setMouseTransparent(true);
+      motopricefield.setFocusTraversable(false);
+
+      Button motoconfirmbutton = new Button("Confirm");
+
       HBox motolistbox = new HBox();
       motolistbox.getChildren().addAll(motolist);
 
       VBox radiobuttons = radiobuttonbox(button);
-
       HBox motobox = new HBox();
+
+      motobox.setAlignment(Pos.CENTER);
       motobox.getChildren().addAll(motolistbox, radiobuttons);
 
+      HBox motopricebox = new HBox();
+      motopricebox.setAlignment(Pos.CENTER);
+      motopricebox.setPadding(new Insets(10, 0, 0, 0));
+      motopricebox.setSpacing(10);
+      motopricebox.getChildren().addAll(motopricefield,motoconfirmbutton);
+
+      VBox moto = new VBox();
+      moto.setStyle("-fx-background-color:#abdbe3;");
+      moto.setPadding(new Insets(10, 0, 10, 0));
+      moto.setAlignment(Pos.CENTER);
+      moto.getChildren().addAll(motobox, motopricebox);
+
       Stage moto_stage = new Stage();
-      var motoscene = new Scene(motobox,500,300);
+      var motoscene = new Scene(moto,500,350);
 
       moto_stage.setScene(motoscene);
       moto_stage.setTitle("MOTORBIKE SERVICES");
@@ -501,6 +605,25 @@ TableColumn<Product, String> motorbikepriceColumn ;
       moto_stage.show();
       //prevent full screen
       moto_stage.setResizable(false);
+
+      //send total price to second stage plus reseting price
+      motoconfirmbutton.setOnAction(e->{
+        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ price + "€"  + "\nIf you want to continue to checkout press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        confirm_alert.showAndWait();
+        if (confirm_alert.getResult() == ButtonType.YES) {
+          price_textfield.setText(String.valueOf(price));
+          price = 0;
+          moto_stage.close();
+          second_stage.show();
+          }
+      });
+
+      //reset price on close
+      moto_stage.setOnCloseRequest(event ->{
+        price=0;
+        moto_stage.close();
+        second_stage.show();
+      });
     }
 
     public VBox radiobuttonbox(Button button){
@@ -516,6 +639,8 @@ TableColumn<Product, String> motorbikepriceColumn ;
       }
       rbbox.setPadding(new Insets(26, 0, 0, 5));
       rbbox.setSpacing(7);
+
+      System.out.println("Starting price: "+price);
 
       if(button.getGraphic().equals(car_button.getGraphic())){
         for(RadioButton b  : radiobuttons){
@@ -536,6 +661,16 @@ TableColumn<Product, String> motorbikepriceColumn ;
                     }
                   }
                 }
+                //add service price to total
+                if(b.isSelected()){
+                  price+=7;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=7;
+                  System.out.println("Sub price: "+price);
+                }
+                carpricefield.setText(String.valueOf(price));
                 break;
               case "2":
               //disables radiobuttons
@@ -552,6 +687,16 @@ TableColumn<Product, String> motorbikepriceColumn ;
                     }
                   }
                 }
+                //add service price to total
+                if(b.isSelected()){
+                  price+=6;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=6;
+                  System.out.println("Sub price: "+price);
+                }
+                carpricefield.setText(String.valueOf(price));
                 break;
               case "3":
               //disables radiobuttons
@@ -568,6 +713,16 @@ TableColumn<Product, String> motorbikepriceColumn ;
                     }
                   }
                 }
+                //add service price to total
+                if(b.isSelected()){
+                  price+=12;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=12;
+                  System.out.println("Sub price: "+price);
+                }
+                carpricefield.setText(String.valueOf(price));
                 break;
               case "4":
               //disables radiobuttons
@@ -584,6 +739,16 @@ TableColumn<Product, String> motorbikepriceColumn ;
                     }
                   }
                 }
+                //add service price to total
+                if(b.isSelected()){
+                  price+=9;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=9;
+                  System.out.println("Sub price: "+price);
+                }
+                carpricefield.setText(String.valueOf(price));
                 break;
               case "5":
               //disables radiobuttons
@@ -600,6 +765,16 @@ TableColumn<Product, String> motorbikepriceColumn ;
                     }
                   }
                 }
+                //add service price to total
+                if(b.isSelected()){
+                  price+=8;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=8;
+                  System.out.println("Sub price: "+price);
+                }
+                carpricefield.setText(String.valueOf(price));
                 break;
               case "6":
               //disables radiobuttons
@@ -616,18 +791,64 @@ TableColumn<Product, String> motorbikepriceColumn ;
                     }
                   }
                 }
+                //add service price to total
+                if(b.isSelected()){
+                  price+=15;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=15;
+                  System.out.println("Sub price: "+price);
+                }
+                carpricefield.setText(String.valueOf(price));
                 break;
               case "7":
-                
+                //add service price to total
+                if(b.isSelected()){
+                  price+=80;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=80;
+                  System.out.println("Sub price: "+price);
+                }
+                carpricefield.setText(String.valueOf(price));
                 break;
               case "8":
-                
+                //add service price to total
+                if(b.isSelected()){
+                  price+=80;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=80;
+                  System.out.println("Sub price: "+price);
+                }
+                carpricefield.setText(String.valueOf(price));
                 break;
               case "9": 
-                
+                //add service price to total
+                if(b.isSelected()){
+                  price+=20;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=20;
+                  System.out.println("Sub price: "+price);
+                }
+                carpricefield.setText(String.valueOf(price));
                 break;
               case "10":
-
+                //add service price to total
+                if(b.isSelected()){
+                  price+=3;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=3;
+                  System.out.println("Sub price: "+price);
+                }
+                carpricefield.setText(String.valueOf(price));
                 break;
             }
           });
@@ -652,6 +873,16 @@ TableColumn<Product, String> motorbikepriceColumn ;
                     }
                   }
                 }
+                //add service price to total
+                if(b.isSelected()){
+                  price+=8;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=8;
+                  System.out.println("Sub price: "+price);
+                }
+                jeeppricefield.setText(String.valueOf(price));
                 break;
               case "2":
               //disables radiobuttons
@@ -668,6 +899,16 @@ TableColumn<Product, String> motorbikepriceColumn ;
                     }
                   }
                 }
+                //add service price to total
+                if(b.isSelected()){
+                  price+=7;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=7;
+                  System.out.println("Sub price: "+price);
+                }
+                jeeppricefield.setText(String.valueOf(price));
                 break;
               case "3":
               //disables radiobuttons
@@ -684,6 +925,16 @@ TableColumn<Product, String> motorbikepriceColumn ;
                     }
                   }
                 }
+                //add service price to total
+                if(b.isSelected()){
+                  price+=14;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=14;
+                  System.out.println("Sub price: "+price);
+                }
+                jeeppricefield.setText(String.valueOf(price));
                 break;
               case "4":
               //disables radiobuttons
@@ -700,6 +951,16 @@ TableColumn<Product, String> motorbikepriceColumn ;
                     }
                   }
                 }
+                //add service price to total
+                if(b.isSelected()){
+                  price+=10;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=10;
+                  System.out.println("Sub price: "+price);
+                }
+                jeeppricefield.setText(String.valueOf(price));
                 break;
               case "5":
               //disables radiobuttons
@@ -716,6 +977,16 @@ TableColumn<Product, String> motorbikepriceColumn ;
                     }
                   }
                 }
+                //add service price to total
+                if(b.isSelected()){
+                  price+=9;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=9;
+                  System.out.println("Sub price: "+price);
+                }
+                jeeppricefield.setText(String.valueOf(price));
                 break;
               case "6":
               //disables radiobuttons
@@ -732,18 +1003,64 @@ TableColumn<Product, String> motorbikepriceColumn ;
                     }
                   }
                 }
+                //add service price to total
+                if(b.isSelected()){
+                  price+=17;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=17;
+                  System.out.println("Sub price: "+price);
+                }
+                jeeppricefield.setText(String.valueOf(price));
                 break;
               case "7":
-             
+                //add service price to total
+                if(b.isSelected()){
+                  price+=80;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=80;
+                  System.out.println("Sub price: "+price);
+                }
+                jeeppricefield.setText(String.valueOf(price));
                 break;
               case "8":
-                
+                //add service price to total
+                if(b.isSelected()){
+                  price+=90;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=90;
+                  System.out.println("Sub price: "+price);
+                }
+                jeeppricefield.setText(String.valueOf(price));
                 break;
               case "9":
-                
+                //add service price to total
+                if(b.isSelected()){
+                  price+=20;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=20;
+                  System.out.println("Sub price: "+price);
+                }
+                jeeppricefield.setText(String.valueOf(price));
                 break;
               case "10":
-                
+                //add service price to total
+                if(b.isSelected()){
+                  price+=3;
+                  System.out.println("Add price: "+price);
+                //if not selected subtract service price from total
+                }else{
+                  price-=3;
+                  System.out.println("Sub price: "+price);
+                }
+                jeeppricefield.setText(String.valueOf(price));
                 break;
             }
           });
@@ -769,12 +1086,16 @@ TableColumn<Product, String> motorbikepriceColumn ;
                       }
                     }
                   }
-                  break;
-                case "2":
-                 
-                  break;
-                case "3":
-                  
+                  //add service price to total
+                  if(b.isSelected()){
+                    price+=6;
+                    System.out.println("Add price: "+price);
+                  //if not selected subtract service price from total
+                  }else{
+                    price-=6;
+                    System.out.println("Sub price: "+price);
+                  }
+                  motopricefield.setText(String.valueOf(price));
                   break;
                 case "4":
                   for(RadioButton rb  : radiobuttons){
@@ -789,24 +1110,40 @@ TableColumn<Product, String> motorbikepriceColumn ;
                       }
                     }
                   }
-                  break;
-                case "5":
-                  
-                  break;
-                case "6":
-                  
-                  break;
-                case "7":
-                  
+                  //add service price to total
+                  if(b.isSelected()){
+                    price+=8;
+                    System.out.println("Add price: "+price);
+                  //if not selected subtract service price from total
+                  }else{
+                    price-=8;
+                    System.out.println("Sub price: "+price);
+                  }
+                  motopricefield.setText(String.valueOf(price));
                   break;
                 case "8":
-                  
+                  //add service price to total
+                  if(b.isSelected()){
+                    price+=40;
+                    System.out.println("Add price: "+price);
+                  //if not selected subtract service price from total
+                  }else{
+                    price-=40;
+                    System.out.println("Sub price: "+price);
+                  }
+                  motopricefield.setText(String.valueOf(price));
                   break;
                 case "9":
-                  
-                  break;
-                case "10":
-                  
+                  //add service price to total
+                  if(b.isSelected()){
+                    price+=10;
+                    System.out.println("Add price: "+price);
+                  //if not selected subtract service price from total
+                  }else{
+                    price-=10;
+                    System.out.println("Sub price: "+price);
+                  }
+                  motopricefield.setText(String.valueOf(price));
                   break;
               }
             });
