@@ -178,6 +178,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
       stage.setMinHeight(768);
       stage.setMinWidth(1024);
       stage.setTitle("CAR WASH");
+      stage.setResizable(false);
       stage.show();
 
       for(Map.Entry<String,Button> m : buttons.entrySet()){
@@ -195,6 +196,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
                 HBox button_box = new HBox();
 
                 Button checkout_button = new Button ("Ckeckout");
+                
                 Button cancel_button = new Button("Cancel");
                 
                 TextField price_textfield = new TextField();
@@ -221,6 +223,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
                 second_stage.setMinWidth(800);
                 second_stage.setMinHeight(400);
                 second_stage.setTitle("SERVICES");
+                second_stage.setResizable(false);
                 stage.hide();
                 second_stage.show();
                 //checkout and cancel buttons same size
@@ -317,30 +320,40 @@ TableColumn<Product, String> motorbikepriceColumn ;
       idColumn.setMinWidth(30);
       idColumn.setSortable(false);
       idColumn.setCellValueFactory(new PropertyValueFactory<>("product_id"));
+      //prevent column resize to stop a bug which made listtable expand
+      idColumn.setResizable(false);
 
       //Name column
       nameColumn = new TableColumn<>("Product");
       nameColumn.setMinWidth(200);
       nameColumn.setSortable(false);
       nameColumn.setCellValueFactory(new PropertyValueFactory<>("product_name"));
+      //prevent column resize to stop a bug which made listtable expand
+      nameColumn.setResizable(false);
       
       //carprice column
       carpriceColumn = new TableColumn<>("Car Price");
       carpriceColumn.setMinWidth(100);
       carpriceColumn.setSortable(false);
       carpriceColumn.setCellValueFactory(new PropertyValueFactory<>("car_price"));
+      //prevent column resize to stop a bug which made listtable expand
+      carpriceColumn.setResizable(false);
 
       //jeepprice column
       jeeppriceColumn = new TableColumn<>("Jeep Price");
       jeeppriceColumn.setMinWidth(100);
       jeeppriceColumn.setSortable(false);
       jeeppriceColumn.setCellValueFactory(new PropertyValueFactory<>("jeep_price"));
+      //prevent column resize to stop a bug which made listtable expand
+      jeeppriceColumn.setResizable(false);
 
       //motorbikeprice column
       motorbikepriceColumn = new TableColumn<>("Motorbike Price");
       motorbikepriceColumn.setMinWidth(100);
       motorbikepriceColumn.setSortable(false);
       motorbikepriceColumn.setCellValueFactory(new PropertyValueFactory<>("motorbike_price"));
+      //prevent column resize to stop a bug which made listtable expand
+      motorbikepriceColumn.setResizable(false);
 
       listtable = new TableView<>();
       listtable.setItems(getProduct());
@@ -394,15 +407,15 @@ TableColumn<Product, String> motorbikepriceColumn ;
 
     public void buttonPressed(Button button){
       if(button.getGraphic().equals(car_button.getGraphic())){
-        carScene();
+        carScene(button);
       }else if(button.getGraphic().equals(jeep_button.getGraphic())){
-        jeepScene();
+        jeepScene(button);
       }else if(button.getGraphic().equals(moto_button.getGraphic())){
-        motoScene();
+        motoScene(button);
       }
     }
 
-    public void carScene() {
+    public void carScene(Button button) {
 
       TableView carlist = new TableView<>();
       carlist.setItems(getProduct());
@@ -413,9 +426,11 @@ TableColumn<Product, String> motorbikepriceColumn ;
       carlist.setMouseTransparent(true);
       carlist.setFocusTraversable(false);
 
-      HBox carbox = new HBox();
-      carbox.getChildren().addAll(carlist);
+      VBox radiobuttons = radiobuttonbox(button);
 
+      HBox carbox = new HBox();
+      carbox.getChildren().addAll(carlist,radiobuttons);
+      
       Stage car_stage = new Stage();
       var carscene = new Scene(carbox,500,300);
 
@@ -426,10 +441,9 @@ TableColumn<Product, String> motorbikepriceColumn ;
       car_stage.show();
       //prevent full screen
       car_stage.setResizable(false);
-
     }
 
-    public void jeepScene() {
+    public void jeepScene(Button button) {
 
       TableView jeeplist = new TableView<>();
       jeeplist.setItems(getProduct());
@@ -440,8 +454,10 @@ TableColumn<Product, String> motorbikepriceColumn ;
       jeeplist.setMouseTransparent(true);
       jeeplist.setFocusTraversable(false);
 
+      VBox radiobuttons = radiobuttonbox(button);
+
       HBox jeepbox = new HBox();
-      jeepbox.getChildren().addAll(jeeplist);
+      jeepbox.getChildren().addAll(jeeplist,radiobuttons);
 
       Stage jeep_stage = new Stage();
       var jeepscene = new Scene(jeepbox,500,300);
@@ -456,7 +472,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
       
     }
 
-    public void motoScene() {
+    public void motoScene(Button button) {
       
       TableView motolist = new TableView<>();
       motolist.setItems(getProduct());
@@ -467,8 +483,13 @@ TableColumn<Product, String> motorbikepriceColumn ;
       motolist.setMouseTransparent(true);
       motolist.setFocusTraversable(false);
 
+      HBox motolistbox = new HBox();
+      motolistbox.getChildren().addAll(motolist);
+
+      VBox radiobuttons = radiobuttonbox(button);
+
       HBox motobox = new HBox();
-      motobox.getChildren().addAll(motolist);
+      motobox.getChildren().addAll(motolistbox, radiobuttons);
 
       Stage moto_stage = new Stage();
       var motoscene = new Scene(motobox,500,300);
@@ -480,8 +501,326 @@ TableColumn<Product, String> motorbikepriceColumn ;
       moto_stage.show();
       //prevent full screen
       moto_stage.setResizable(false);
-      
     }
+
+    public VBox radiobuttonbox(Button button){
+
+      VBox rbbox = new VBox();
+
+      ObservableList<RadioButton> radiobuttons  = FXCollections.observableArrayList();
+      for(int i=0; i<10; i++){
+        String s = String.valueOf(i+1);
+        RadioButton rb = new RadioButton(s);
+        radiobuttons.add(i, rb);
+        rbbox.getChildren().add(rb);
+      }
+      rbbox.setPadding(new Insets(26, 0, 0, 5));
+      rbbox.setSpacing(7);
+
+      if(button.getGraphic().equals(car_button.getGraphic())){
+        for(RadioButton b  : radiobuttons){
+          b.setOnAction((k)->{
+            //reactivates disabled radiobuttons
+            for(RadioButton rb  : radiobuttons){
+              rb.setDisable(false);
+            }
+            switch (b.getText()) {
+              case "1":
+              //disables radiobuttons
+                for(RadioButton rb  : radiobuttons){
+                  if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
+                    rb.setDisable(true);
+                  }
+                }
+                //reactivates disabled radiobuttons
+                if(!b.isSelected()){
+                  for(RadioButton rb  : radiobuttons){
+                    if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
+                      rb.setDisable(false);
+                    }
+                  }
+                }
+                break;
+              case "2":
+              //disables radiobuttons
+                for(RadioButton rb  : radiobuttons){
+                  if(rb.getText().equals("3") || rb.getText().equals("5") || rb.getText().equals("6")){
+                    rb.setDisable(true);
+                  }
+                }
+                //reactivates disabled radiobuttons
+                if(!b.isSelected()){
+                  for(RadioButton rb  : radiobuttons){
+                    if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
+                      rb.setDisable(false);
+                    }
+                  }
+                }
+                break;
+              case "3":
+              //disables radiobuttons
+                for(RadioButton rb  : radiobuttons){
+                  if(rb.getText().equals("1") || rb.getText().equals("2") || rb.getText().equals("4") || rb.getText().equals("5") || rb.getText().equals("6")){
+                    rb.setDisable(true);
+                  }
+                }
+                //reactivates disabled radiobuttons
+                if(!b.isSelected()){
+                  for(RadioButton rb  : radiobuttons){
+                    if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
+                      rb.setDisable(false);
+                    }
+                  }
+                }
+                break;
+              case "4":
+              //disables radiobuttons
+                for(RadioButton rb  : radiobuttons){
+                  if(rb.getText().equals("1") || rb.getText().equals("3") || rb.getText().equals("6")){
+                    rb.setDisable(true);
+                  }
+                }
+                //reactivates disabled radiobuttons
+                if(!b.isSelected()){
+                  for(RadioButton rb  : radiobuttons){
+                    if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
+                      rb.setDisable(false);
+                    }
+                  }
+                }
+                break;
+              case "5":
+              //disables radiobuttons
+                for(RadioButton rb  : radiobuttons){
+                  if(rb.getText().equals("2") || rb.getText().equals("3") || rb.getText().equals("6")){
+                    rb.setDisable(true);
+                  }
+                }
+                //reactivates disabled radiobuttons
+                if(!b.isSelected()){
+                  for(RadioButton rb  : radiobuttons){
+                    if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
+                      rb.setDisable(false);
+                    }
+                  }
+                }
+                break;
+              case "6":
+              //disables radiobuttons
+                for(RadioButton rb  : radiobuttons){
+                  if(rb.getText().equals("1") || rb.getText().equals("2") || rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("5")){
+                    rb.setDisable(true);
+                  }
+                }
+                //reactivates disabled radiobuttons
+                if(!b.isSelected()){
+                  for(RadioButton rb  : radiobuttons){
+                    if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
+                      rb.setDisable(false);
+                    }
+                  }
+                }
+                break;
+              case "7":
+                
+                break;
+              case "8":
+                
+                break;
+              case "9": 
+                
+                break;
+              case "10":
+
+                break;
+            }
+          });
+        }
+      // radiobuttons for jeep window
+      }else if(button.getGraphic().equals(jeep_button.getGraphic())){
+        for(RadioButton b  : radiobuttons){
+          b.setOnAction((k)->{
+            switch (b.getText()) {
+              case "1":
+              //disables radiobuttons
+                for(RadioButton rb  : radiobuttons){
+                  if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
+                    rb.setDisable(true);
+                  }
+                }
+                //reactivates disabled radiobuttons
+                if(!b.isSelected()){
+                  for(RadioButton rb  : radiobuttons){
+                    if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
+                      rb.setDisable(false);
+                    }
+                  }
+                }
+                break;
+              case "2":
+              //disables radiobuttons
+                for(RadioButton rb  : radiobuttons){
+                  if(rb.getText().equals("3") || rb.getText().equals("5") || rb.getText().equals("6")){
+                    rb.setDisable(true);
+                  }
+                }
+                 //reactivates disabled radiobuttons
+                if(!b.isSelected()){
+                  for(RadioButton rb  : radiobuttons){
+                    if(rb.getText().equals("3") || rb.getText().equals("5") || rb.getText().equals("6")){
+                      rb.setDisable(false);
+                    }
+                  }
+                }
+                break;
+              case "3":
+              //disables radiobuttons
+                for(RadioButton rb  : radiobuttons){
+                  if(rb.getText().equals("1") || rb.getText().equals("2") || rb.getText().equals("4") || rb.getText().equals("5") || rb.getText().equals("6")){
+                    rb.setDisable(true);
+                  }
+                }
+                 //reactivates disabled radiobuttons
+                if(!b.isSelected()){
+                  for(RadioButton rb  : radiobuttons){
+                    if(rb.getText().equals("1") || rb.getText().equals("2") || rb.getText().equals("4") || rb.getText().equals("5") || rb.getText().equals("6")){
+                      rb.setDisable(false);
+                    }
+                  }
+                }
+                break;
+              case "4":
+              //disables radiobuttons
+                for(RadioButton rb  : radiobuttons){
+                  if(rb.getText().equals("1") || rb.getText().equals("3") || rb.getText().equals("6")){
+                    rb.setDisable(true);
+                  }
+                }
+                 //reactivates disabled radiobuttons
+                if(!b.isSelected()){
+                  for(RadioButton rb  : radiobuttons){
+                    if(rb.getText().equals("1") || rb.getText().equals("3") || rb.getText().equals("6")){
+                      rb.setDisable(false);
+                    }
+                  }
+                }
+                break;
+              case "5":
+              //disables radiobuttons
+                for(RadioButton rb  : radiobuttons){
+                  if(rb.getText().equals("2") || rb.getText().equals("3") || rb.getText().equals("6")){
+                    rb.setDisable(true);
+                  }
+                }
+                 //reactivates disabled radiobuttons
+                if(!b.isSelected()){
+                  for(RadioButton rb  : radiobuttons){
+                    if(rb.getText().equals("2") || rb.getText().equals("3") || rb.getText().equals("6")){
+                      rb.setDisable(false);
+                    }
+                  }
+                }
+                break;
+              case "6":
+              //disables radiobuttons
+                for(RadioButton rb  : radiobuttons){
+                  if(rb.getText().equals("1") || rb.getText().equals("2") || rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("5")){
+                    rb.setDisable(true);
+                  }
+                }
+                 //reactivates disabled radiobuttons
+                if(!b.isSelected()){
+                  for(RadioButton rb  : radiobuttons){
+                    if(rb.getText().equals("1") || rb.getText().equals("2") || rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("5")){
+                      rb.setDisable(false);
+                    }
+                  }
+                }
+                break;
+              case "7":
+             
+                break;
+              case "8":
+                
+                break;
+              case "9":
+                
+                break;
+              case "10":
+                
+                break;
+            }
+          });
+        }
+      // radiobuttons ofr motorbike window
+      }else if(button.getGraphic().equals(moto_button.getGraphic())){
+        for(RadioButton b  : radiobuttons){
+          if(b.getText().equals("2") || b.getText().equals("3") || b.getText().equals("5") || b.getText().equals("6") || b.getText().equals("7") || b.getText().equals("10")){
+            b.setDisable(true);
+          }else{
+            b.setOnAction((k)->{
+              switch (b.getText()) {
+                case "1":
+                  for(RadioButton rb  : radiobuttons){
+                    if(rb.getText().equals("4")){
+                      rb.setDisable(true);
+                    }
+                  }
+                  if(!b.isSelected()){
+                    for(RadioButton rb  : radiobuttons){
+                      if(rb.getText().equals("4")){
+                        rb.setDisable(false);
+                      }
+                    }
+                  }
+                  break;
+                case "2":
+                 
+                  break;
+                case "3":
+                  
+                  break;
+                case "4":
+                  for(RadioButton rb  : radiobuttons){
+                    if(rb.getText().equals("1")){
+                      rb.setDisable(true);
+                    }
+                  }
+                  if(!b.isSelected()){
+                    for(RadioButton rb  : radiobuttons){
+                      if(rb.getText().equals("1")){
+                        rb.setDisable(false);
+                      }
+                    }
+                  }
+                  break;
+                case "5":
+                  
+                  break;
+                case "6":
+                  
+                  break;
+                case "7":
+                  
+                  break;
+                case "8":
+                  
+                  break;
+                case "9":
+                  
+                  break;
+                case "10":
+                  
+                  break;
+              }
+            });
+          }
+        }
+        //System.out.println("moto");
+      }
+      return rbbox;
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
