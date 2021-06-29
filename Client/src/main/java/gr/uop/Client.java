@@ -237,6 +237,8 @@ TableColumn<Product, String> motorbikepriceColumn ;
                 System.out.println(stringbuilder);
                 second_stage.setOnCloseRequest(event ->{
                   stringbuilder = "";
+                  price=0;
+                  price_textfield.setText("");
                   //text.setText("");
                   second_stage.hide();
                   stage.show();
@@ -245,6 +247,8 @@ TableColumn<Product, String> motorbikepriceColumn ;
                   Alert cancel_alert = new Alert(AlertType.CONFIRMATION,"To get back to main menu press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
                   cancel_alert.showAndWait();
                   if (cancel_alert.getResult() == ButtonType.YES) {
+                    price=0;
+                    price_textfield.setText("");
                     second_stage.hide();
                     stage.show();
                   }
@@ -475,6 +479,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
         if (confirm_alert.getResult() == ButtonType.YES) {
           price_textfield.setText(String.valueOf(price));
           price = 0;
+          carpricefield.setText("");
           car_stage.close();
           second_stage.show();
           }
@@ -483,6 +488,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
       //reset price on close
       car_stage.setOnCloseRequest(event ->{
         price=0;
+        carpricefield.setText("");
         car_stage.close();
         second_stage.show();
       });
@@ -542,6 +548,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
         if (confirm_alert.getResult() == ButtonType.YES) {
           price_textfield.setText(String.valueOf(price));
           price = 0;
+          jeeppricefield.setText("");
           jeep_stage.close();
           second_stage.show();
           }
@@ -550,6 +557,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
       //reset price on close
       jeep_stage.setOnCloseRequest(event ->{
         price=0;
+        jeeppricefield.setText("");
         jeep_stage.close();
         second_stage.show();
       });
@@ -613,6 +621,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
         if (confirm_alert.getResult() == ButtonType.YES) {
           price_textfield.setText(String.valueOf(price));
           price = 0;
+          motopricefield.setText("");
           moto_stage.close();
           second_stage.show();
           }
@@ -621,6 +630,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
       //reset price on close
       moto_stage.setOnCloseRequest(event ->{
         price=0;
+        motopricefield.setText("");
         moto_stage.close();
         second_stage.show();
       });
