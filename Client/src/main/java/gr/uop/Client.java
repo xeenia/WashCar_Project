@@ -40,24 +40,27 @@ Button car_button = new Button();
 Button jeep_button = new Button();
 Button moto_button = new Button();
 Stage second_stage = new Stage();
+TextField text = new TextField();
 TextField price_textfield = new TextField();
 TextField carpricefield = new TextField();
 TextField jeeppricefield = new TextField();
 TextField motopricefield = new TextField();
-
 TableColumn<Product, String> idColumn ;
 TableColumn<Product, String> nameColumn ;
 TableColumn<Product, String> carpriceColumn ;
 TableColumn<Product, String> jeeppriceColumn ;
 TableColumn<Product, String> motorbikepriceColumn ;
+ClientFile file = new ClientFile();
+Stage stage = new Stage();
 
     @Override
     public void start(Stage stage) {
+      this.stage=stage;
       HBox logo = createLogo();
       HBox textPane = new HBox();
       VBox mainPage = new VBox();
  
-      TextField text = new TextField();
+      
       text.setPromptText("Please enter your licence plate");
       text.setPrefSize(200, 40);
       text.setEditable(false);
@@ -86,6 +89,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
       numbersPane.setVgap(5);
       numbersPane.setPadding(new Insets(10, 5, 10, 5));
 
+      //in order to get the keyboard layout 
       String[] letters = new String[]{"Q","W","E","R","T","Y","U","I","O","P",
                                       "A","S","D","F","G","H","J","K","L",
                                       "Z","X","C","V","B","N","M"};
@@ -96,6 +100,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
 
       Map<String, Button> buttons = new TreeMap<String, Button>();
       
+      // put letter keys on keyboard pane and in TreeMap
       var index=0;
       for(int i=0; i< 3; i++){
         for(int j=0; j< 10; j++){
@@ -107,7 +112,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
           }else if(index == 26){
             break;
           }
-          
+          // change line when we find "P" and "L" in order to simulate a real keyboard
           if((index!=0) && (!letters[index-1].equals("P") || !letters[index-1].equals("L"))){
             Button letter_button = new Button(letters[index]);
             letter_button.setPrefSize(40, 40);
@@ -122,7 +127,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
           index++;
         }
       }
-
+      // we put number keys in keyboard pane and in TreeMap
       index=0;
       for(int i=0; i< 3; i++){
         for(int j=0; j< 3; j++){
@@ -178,6 +183,8 @@ TableColumn<Product, String> motorbikepriceColumn ;
 
       var scene = new Scene(mainPage, 1024, 768);
 
+      //ClientFile();
+
       stage.setScene(scene);
       stage.setMinHeight(768);
       stage.setMinWidth(1024);
@@ -185,9 +192,11 @@ TableColumn<Product, String> motorbikepriceColumn ;
       stage.setResizable(false);
       stage.show();
 
+      // we simulate every key stroke and create and display our clients licence plate
       for(Map.Entry<String,Button> m : buttons.entrySet()){
 
         m.getValue().setOnAction((e) -> {
+          //when client presses the "Enter" key he is redirectef to our services window
           if(m.getKey().equals("Enter")){
             if(!text.getText().isBlank() && text.getText().length()>=2){
               Alert alert = new Alert(AlertType.CONFIRMATION, "Your licence plate is " + stringbuilder + "\nTo continue press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
@@ -198,23 +207,15 @@ TableColumn<Product, String> motorbikepriceColumn ;
                 VBox scene_box = new VBox();
                 VBox bottom_box = new VBox();
                 HBox button_box = new HBox();
-
-                Button checkout_button = new Button ("Ckeckout");
                 
                 Button cancel_button = new Button("Cancel");
+                cancel_button.setPadding(new Insets(5,5,5,5));
                 
-                
-                price_textfield.setMaxSize(200, 40);
-                price_textfield.setPromptText("The total price is shown here");
-                price_textfield.setEditable(false);
-                price_textfield.setMouseTransparent(true);
-                price_textfield.setFocusTraversable(false);
-
-                button_box.getChildren().addAll(checkout_button,cancel_button);
+                button_box.getChildren().addAll(cancel_button);
                 button_box.setAlignment(Pos.CENTER);
                 button_box.setSpacing(10);
 
-                bottom_box.getChildren().addAll(price_textfield, button_box);
+                bottom_box.getChildren().addAll(button_box);
                 bottom_box.setAlignment(Pos.CENTER);
                 bottom_box.setPadding(new Insets(10, 0, 10, 0));
                 bottom_box.setSpacing(10);
@@ -230,17 +231,17 @@ TableColumn<Product, String> motorbikepriceColumn ;
                 second_stage.setMinHeight(400);
                 second_stage.setTitle("SERVICES");
                 second_stage.setResizable(false);
+                //switch focus to new window
                 stage.hide();
                 second_stage.show();
-                //checkout and cancel buttons same size
-                cancel_button.setPrefWidth(checkout_button.getWidth());
+                
                 System.out.println(stringbuilder);
                 second_stage.setOnCloseRequest(event ->{
                   stringbuilder = "";
                   price=0;
                   price_textfield.setText("");
                   //text.setText("");
-                  second_stage.hide();
+                  second_stage.close();
                   stage.show();
                 });
                 cancel_button.setOnAction(c->{
@@ -249,18 +250,21 @@ TableColumn<Product, String> motorbikepriceColumn ;
                   if (cancel_alert.getResult() == ButtonType.YES) {
                     price=0;
                     price_textfield.setText("");
-                    second_stage.hide();
+                    second_stage.close();
                     stage.show();
                   }
                 });
+              // reset stringbuilder value
               }else if(alert.getResult() == ButtonType.NO || alert.getResult() == ButtonType.CANCEL){
                 stringbuilder = "";
               }
+            //wrong type o licence plate warning
             }else{
                 Alert warning_alert = new Alert(AlertType.CONFIRMATION, "Please enter a valid license plate" , ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
                 warning_alert.showAndWait();
                 stringbuilder = "";
             }
+            // redirected to vehicle based service windows
             car_button.setOnAction(car->{
               buttonPressed(car_button);
             });
@@ -270,6 +274,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
             moto_button.setOnAction(moto->{
               buttonPressed(moto_button);
             });
+          // simulate backspace and Space keys functionality
           }else{
             if(!m.getKey().equals("Enter") && !m.getKey().equals("Backspace")){
               text.setText(m.getKey());
@@ -293,7 +298,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
         });
       }  
     }  
-
+    // our company's logo
     public HBox createLogo(){
       var lb_incBook = new Label("Income Book");
       lb_incBook.setTextFill(Color.web("#FFFFFF"));
@@ -309,6 +314,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
       p_hb_logo.getChildren().addAll(iv_logo,p_st_lbIncBook);
       return p_hb_logo;
     }
+    //created services ObservableList which will use to make our services' TableViews
     public ObservableList<Product> getProduct(){
       ObservableList<Product> products = FXCollections.observableArrayList();
       products.add(new Product(1, "Πλύσιμο εξωτερικό", "7", "8", "6"));
@@ -323,6 +329,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
       products.add(new Product(10, "Πλύσιμο σασί", "3", "3", "-"));
       return products;
     }
+    //created service list with all vehicle prices
     public HBox productlistWindow(){
 
       //Id column
@@ -367,7 +374,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
 
       listtable = new TableView<>();
       listtable.setItems(getProduct());
-      listtable.getColumns().addAll(idColumn, nameColumn, carpriceColumn, jeeppriceColumn, motorbikepriceColumn);
+      listtable.getColumns().addAll(nameColumn, carpriceColumn, jeeppriceColumn, motorbikepriceColumn);
       //without this line of code we get and extra empty column which we dont need
       listtable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
       listtable.setEditable(false);  
@@ -481,7 +488,10 @@ TableColumn<Product, String> motorbikepriceColumn ;
           price = 0;
           carpricefield.setText("");
           car_stage.close();
-          second_stage.show();
+          second_stage.close();
+          stringbuilder = "";
+          text.setText("");
+          stage.show();
           }
       });
 
@@ -550,7 +560,10 @@ TableColumn<Product, String> motorbikepriceColumn ;
           price = 0;
           jeeppricefield.setText("");
           jeep_stage.close();
-          second_stage.show();
+          second_stage.close();
+          stringbuilder = "";
+          text.setText("");
+          stage.show();
           }
       });
 
@@ -623,7 +636,10 @@ TableColumn<Product, String> motorbikepriceColumn ;
           price = 0;
           motopricefield.setText("");
           moto_stage.close();
-          second_stage.show();
+          second_stage.close();
+          stringbuilder = "";
+          text.setText("");
+          stage.show();
           }
       });
 
@@ -639,7 +655,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
     public VBox radiobuttonbox(Button button){
 
       VBox rbbox = new VBox();
-
+      // radiobuttons automaticly created 
       ObservableList<RadioButton> radiobuttons  = FXCollections.observableArrayList();
       for(int i=0; i<10; i++){
         String s = String.valueOf(i+1);
@@ -652,6 +668,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
 
       System.out.println("Starting price: "+price);
 
+      // cases when car button is pressed 
       if(button.getGraphic().equals(car_button.getGraphic())){
         for(RadioButton b  : radiobuttons){
           b.setOnAction((k)->{
@@ -863,7 +880,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
             }
           });
         }
-      // radiobuttons for jeep window
+      // cases when jeep button is pressed
       }else if(button.getGraphic().equals(jeep_button.getGraphic())){
         for(RadioButton b  : radiobuttons){
           b.setOnAction((k)->{
@@ -1075,7 +1092,7 @@ TableColumn<Product, String> motorbikepriceColumn ;
             }
           });
         }
-      // radiobuttons ofr motorbike window
+      // cases when motorbike button is pressed
       }else if(button.getGraphic().equals(moto_button.getGraphic())){
         for(RadioButton b  : radiobuttons){
           if(b.getText().equals("2") || b.getText().equals("3") || b.getText().equals("5") || b.getText().equals("6") || b.getText().equals("7") || b.getText().equals("10")){
@@ -1159,7 +1176,6 @@ TableColumn<Product, String> motorbikepriceColumn ;
             });
           }
         }
-        //System.out.println("moto");
       }
       return rbbox;
     }
