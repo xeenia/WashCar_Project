@@ -51,10 +51,10 @@ public class IncomeBook {
     private void deleteCarFromFile(String id){
        
     }
-    public void updateCar(String id, int cost, String departute_time){
+    /*public void updateCar(String id, int cost, String departute_time){
         cars.get(findCar(id)).setCost(cost);
-        cars.get(findCar(id)).setDeparture_time(departute_time);
-    }
+        car
+    }*/
 
     public String getCar(String id){
         return cars.get(findCar(id)).getCar_number();

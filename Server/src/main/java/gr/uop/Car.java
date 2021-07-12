@@ -10,7 +10,6 @@ public class Car {
     private String car_number;
     private int cost;
     private String date;
-    private String departure_time;
     private ImageView accept;
     private ImageView cancel;
     private Button acceptButton;
@@ -31,14 +30,6 @@ public class Car {
 
     public void setCancelButton(Button cancelButton) {
         this.cancelButton = cancelButton;
-    }
-
-    public String getDeparture_time() {
-        return this.departure_time;
-    }
-
-    public void setDeparture_time(String departure_time) {
-        this.departure_time = departure_time;
     }
 
     public String getId() {

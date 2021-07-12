@@ -62,11 +62,9 @@ public class Server extends Application {
             }
 
             String text = newValue.toLowerCase();
-            System.out.println("yoo "+ text +" syn "+car.getCar_number() + "gaga "+car.getCar_number().indexOf(text));
             if(car.getId().toLowerCase().indexOf(text) != -1){
               return true;
             }else if(car.getCar_number().indexOf(text)!= -1){
-              System.out.println("yoo2 "+ car.getCar_number());
               return true;
             }else return false;
           });
