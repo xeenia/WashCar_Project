@@ -1,6 +1,15 @@
 
 package gr.uop;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javafx.application.Application;
@@ -36,6 +45,9 @@ public class Client extends Application {
 String stringbuilder ="";
 TableView<Product> listtable;
 int price = 0;
+String service ="";
+String[] servicesplit;
+String data ="";
 Button car_button = new Button();
 Button jeep_button = new Button();
 Button moto_button = new Button();
@@ -50,8 +62,12 @@ TableColumn<Product, String> nameColumn ;
 TableColumn<Product, String> carpriceColumn ;
 TableColumn<Product, String> jeeppriceColumn ;
 TableColumn<Product, String> motorbikepriceColumn ;
-ClientFile file = new ClientFile();
+ObservableList<RadioButton> radiobuttons  = FXCollections.observableArrayList();
+
+
 Stage stage = new Stage();
+ClientFile clientfile = new ClientFile();
+CreateFile file = new CreateFile();
 
     @Override
     public void start(Stage stage) {
@@ -196,7 +212,7 @@ Stage stage = new Stage();
       for(Map.Entry<String,Button> m : buttons.entrySet()){
 
         m.getValue().setOnAction((e) -> {
-          //when client presses the "Enter" key he is redirectef to our services window
+          //when client presses the "Enter" key he is redirected to our services window
           if(m.getKey().equals("Enter")){
             if(!text.getText().isBlank() && text.getText().length()>=2){
               Alert alert = new Alert(AlertType.CONFIRMATION, "Your licence plate is " + stringbuilder + "\nTo continue press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
@@ -298,6 +314,7 @@ Stage stage = new Stage();
         });
       }  
     }  
+
     // our company's logo
     public HBox createLogo(){
       var lb_incBook = new Label("Income Book");
@@ -314,6 +331,7 @@ Stage stage = new Stage();
       p_hb_logo.getChildren().addAll(iv_logo,p_st_lbIncBook);
       return p_hb_logo;
     }
+
     //created services ObservableList which will use to make our services' TableViews
     public ObservableList<Product> getProduct(){
       ObservableList<Product> products = FXCollections.observableArrayList();
@@ -329,6 +347,7 @@ Stage stage = new Stage();
       products.add(new Product(10, "Πλύσιμο σασί", "3", "3", "-"));
       return products;
     }
+
     //created service list with all vehicle prices
     public HBox productlistWindow(){
 
@@ -400,7 +419,6 @@ Stage stage = new Stage();
       ivjeep_logo.setFitWidth(50);
       jeep_button.setGraphic(ivjeep_logo);
       
-      
       moto_button.setPrefSize(50, 50);
       moto_button.setPadding(Insets.EMPTY);
       Image moto_logo = new Image(Client.class.getResourceAsStream("img/moto_logo.png"));
@@ -422,6 +440,7 @@ Stage stage = new Stage();
       return box; 
     }
 
+    //calls vehicle's scene 
     public void buttonPressed(Button button){
       if(button.getGraphic().equals(car_button.getGraphic())){
         carScene(button);
@@ -432,6 +451,7 @@ Stage stage = new Stage();
       }
     }
 
+    //car scene
     public void carScene(Button button) {
 
       TableView carlist = new TableView<>();
@@ -450,11 +470,11 @@ Stage stage = new Stage();
 
       Button carconfirmbutton = new Button("Confirm");
 
-      VBox radiobuttons = radiobuttonbox(button);
+      VBox radioButtonsVBox = radiobuttonbox(button);
 
       HBox carbox = new HBox();
       carbox.setAlignment(Pos.CENTER);
-      carbox.getChildren().addAll(carlist,radiobuttons);
+      carbox.getChildren().addAll(carlist,radioButtonsVBox);
 
       HBox carpricebox = new HBox();
       carpricebox.setAlignment(Pos.CENTER);
@@ -479,20 +499,45 @@ Stage stage = new Stage();
       //prevent full screen
       car_stage.setResizable(false);
 
-      //send total price to second stage plus reseting price
+      //send total price to second stage plus resetting price
       carconfirmbutton.setOnAction(e->{
-        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ price + "€"  + "\nIf you want to continue to checkout press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ price + "€"  + "\nIf you want to continue with payment press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
         confirm_alert.showAndWait();
         if (confirm_alert.getResult() == ButtonType.YES) {
-          price_textfield.setText(String.valueOf(price));
+          List<String> selectedValues = new ArrayList<String>();
+          for(RadioButton b  : radiobuttons){
+            if(b.isSelected()){
+              selectedValues.add(b.getText());
+            }
+          }
+          String rbData = String.join("-", selectedValues);
+          System.out.println(rbData);
+          // String data ="";
+          //write data in file type(licence plate, vehicle type,service id, service price for car)
+          data = String.join(",", stringbuilder, "Car", rbData, carpricefield.getText());
+          WriteToFile();
+          rbData="";
+          data="";
           price = 0;
+          for(RadioButton b  : radiobuttons){
+            if(b.isSelected()){
+              //selectedValues.add(b.getText());
+              b.setSelected(false);
+            }
+          }
           carpricefield.setText("");
           car_stage.close();
           second_stage.close();
           stringbuilder = "";
           text.setText("");
           stage.show();
-          }
+        }
+        else if (confirm_alert.getResult() == ButtonType.CANCEL) {
+          price = 0;
+          carpricefield.setText("");
+          car_stage.close();
+          second_stage.show();
+        }
       });
 
       //reset price on close
@@ -504,6 +549,7 @@ Stage stage = new Stage();
       });
     }
 
+    //jeep scene
     public void jeepScene(Button button) {
 
       TableView jeeplist = new TableView<>();
@@ -522,11 +568,11 @@ Stage stage = new Stage();
 
       Button jeepconfirmbutton = new Button("Confirm");
 
-      VBox radiobuttons = radiobuttonbox(button);
+      VBox radioButtonsVBox = radiobuttonbox(button);
 
       HBox jeepbox = new HBox();
       jeepbox.setAlignment(Pos.CENTER);
-      jeepbox.getChildren().addAll(jeeplist,radiobuttons);
+      jeepbox.getChildren().addAll(jeeplist,radioButtonsVBox);
 
       HBox jeeppricebox = new HBox();
       jeeppricebox.setAlignment(Pos.CENTER);
@@ -553,18 +599,41 @@ Stage stage = new Stage();
 
       //send total price to second stage plus reseting price
       jeepconfirmbutton.setOnAction(e->{
-        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ price + "€"  + "\nIf you want to continue to checkout press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ price + "€"  + "\nIf you want to continue with payment press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
         confirm_alert.showAndWait();
         if (confirm_alert.getResult() == ButtonType.YES) {
-          price_textfield.setText(String.valueOf(price));
-          price = 0;
+          List<String> selectedValues = new ArrayList<String>();
+          for(RadioButton b  : radiobuttons){
+            if(b.isSelected()){
+              selectedValues.add(b.getText());
+            }
+          }
+          String rbData = String.join("-", selectedValues);
+          System.out.println(rbData);
+          //String data ="";
+          data = String.join(",", stringbuilder, "Jeep", rbData, jeeppricefield.getText());
+          WriteToFile();
+          rbData="";
+          data="";
+          price = 0;for(RadioButton b  : radiobuttons){
+            if(b.isSelected()){
+              //selectedValues.add(b.getText());
+              b.setSelected(false);
+            }
+          }
+
           jeeppricefield.setText("");
           jeep_stage.close();
           second_stage.close();
           stringbuilder = "";
           text.setText("");
           stage.show();
-          }
+        }else if (confirm_alert.getResult() == ButtonType.CANCEL) {
+          price = 0;
+          jeeppricefield.setText("");
+          jeep_stage.close();
+          second_stage.show();
+        }
       });
 
       //reset price on close
@@ -577,6 +646,7 @@ Stage stage = new Stage();
       
     }
 
+    //motorbike scene
     public void motoScene(Button button) {
       
       TableView motolist = new TableView<>();
@@ -598,11 +668,11 @@ Stage stage = new Stage();
       HBox motolistbox = new HBox();
       motolistbox.getChildren().addAll(motolist);
 
-      VBox radiobuttons = radiobuttonbox(button);
+      VBox radioButtonsVBox = radiobuttonbox(button);
       HBox motobox = new HBox();
 
       motobox.setAlignment(Pos.CENTER);
-      motobox.getChildren().addAll(motolistbox, radiobuttons);
+      motobox.getChildren().addAll(motolistbox, radioButtonsVBox);
 
       HBox motopricebox = new HBox();
       motopricebox.setAlignment(Pos.CENTER);
@@ -629,18 +699,40 @@ Stage stage = new Stage();
 
       //send total price to second stage plus reseting price
       motoconfirmbutton.setOnAction(e->{
-        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ price + "€"  + "\nIf you want to continue to checkout press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ price + "€"  + "\nIf you want to continue with payment press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
         confirm_alert.showAndWait();
         if (confirm_alert.getResult() == ButtonType.YES) {
-          price_textfield.setText(String.valueOf(price));
+          List<String> selectedValues = new ArrayList<String>();
+          for(RadioButton b  : radiobuttons){
+            if(b.isSelected()){
+              selectedValues.add(b.getText());
+            }
+          }
+          String rbData = String.join("-", selectedValues);
+          //String data ="";
+          data = String.join(",", stringbuilder, "Motorbike", rbData, motopricefield.getText());
+          WriteToFile();
+          rbData="";
+          data="";
           price = 0;
+          for(RadioButton b  : radiobuttons){
+            if(b.isSelected()){
+              b.setSelected(false);
+              //selectedValues.remove(b.getText());
+            }
+          }
           motopricefield.setText("");
           moto_stage.close();
           second_stage.close();
           stringbuilder = "";
           text.setText("");
           stage.show();
-          }
+        }else if (confirm_alert.getResult() == ButtonType.CANCEL) {
+          price = 0;
+          motopricefield.setText("");
+          moto_stage.close();
+          second_stage.show();
+        }
       });
 
       //reset price on close
@@ -652,11 +744,12 @@ Stage stage = new Stage();
       });
     }
 
+    // radiobuttons created plus restrictions
     public VBox radiobuttonbox(Button button){
 
       VBox rbbox = new VBox();
       // radiobuttons automaticly created 
-      ObservableList<RadioButton> radiobuttons  = FXCollections.observableArrayList();
+     
       for(int i=0; i<10; i++){
         String s = String.valueOf(i+1);
         RadioButton rb = new RadioButton(s);
@@ -670,7 +763,7 @@ Stage stage = new Stage();
 
       // cases when car button is pressed 
       if(button.getGraphic().equals(car_button.getGraphic())){
-        for(RadioButton b  : radiobuttons){
+        for(RadioButton  b: radiobuttons){
           b.setOnAction((k)->{
             switch (b.getText()) {
               case "1":
@@ -691,10 +784,18 @@ Stage stage = new Stage();
                 //add service price to total
                 if(b.isSelected()){
                   price+=7;
+                  if(service.isEmpty()){
+                    service+=b.getText();
+                  }else{
+                    service = String.join(",", b.getText());
+                  }
+                  System.out.println(service);
                   System.out.println("Add price: "+price);
                 //if not selected subtract service price from total
                 }else{
                   price-=7;
+                  // service.split(",");
+                  // System.out.println(service);
                   System.out.println("Sub price: "+price);
                 }
                 carpricefield.setText(String.valueOf(price));
@@ -717,10 +818,22 @@ Stage stage = new Stage();
                 //add service price to total
                 if(b.isSelected()){
                   price+=6;
+                  // if(service.isEmpty()){
+                  //   service+=b.getText();
+                  // }else{
+                  //   service = String.join(",", service,b.getText());
+                  // }
+                  // System.out.println(service);
                   System.out.println("Add price: "+price);
                 //if not selected subtract service price from total
                 }else{
                   price-=6;
+                  // servicesplit = service.split(",");
+                  // service="";
+                  // for(int i = 0; i<servicesplit.length-1; i++){
+                  //   service += servicesplit[i];
+                  // }
+                  // System.out.println(service);
                   System.out.println("Sub price: "+price);
                 }
                 carpricefield.setText(String.valueOf(price));
@@ -829,18 +942,8 @@ Stage stage = new Stage();
                 }
                 carpricefield.setText(String.valueOf(price));
                 break;
+              // duplicate cases 7 and 8
               case "7":
-                //add service price to total
-                if(b.isSelected()){
-                  price+=80;
-                  System.out.println("Add price: "+price);
-                //if not selected subtract service price from total
-                }else{
-                  price-=80;
-                  System.out.println("Sub price: "+price);
-                }
-                carpricefield.setText(String.valueOf(price));
-                break;
               case "8":
                 //add service price to total
                 if(b.isSelected()){
@@ -1179,6 +1282,18 @@ Stage stage = new Stage();
       }
       return rbbox;
     }
+    //write data to file
+    public void WriteToFile() {
+      try {
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("CarWash.txt", true)));
+        out.println(data);
+        out.close();
+        System.out.println("Successfully wrote to the file.");
+      }catch (IOException e) {
+        System.out.println("An error occurred.");
+        e.printStackTrace();
+      }
+  }
 
     public static void main(String[] args) {
         launch(args);
