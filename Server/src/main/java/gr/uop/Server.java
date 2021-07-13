@@ -2,10 +2,19 @@ package gr.uop;
 
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Observable;
 import java.util.Scanner;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
@@ -32,45 +41,107 @@ public class Server extends Application {
   
     @Override
     public void start(Stage stage) {   
-        HBox p_hb_logo = createLogo();
-        TableView table = createTable();
-        VBox p_vb_center = new VBox();
-        TextField tx = createSearchField();
-        p_vb_center.getChildren().addAll(tx,table);
-        VBox p_vb_mainPage = new VBox(); 
-        p_vb_mainPage.setStyle("-fx-background-color:#abdbe3;");
-        p_vb_mainPage.setSpacing(15);
-        p_vb_mainPage.setPadding(new Insets(20,20,20,20));
-        p_vb_mainPage.getChildren().addAll(createRefreshButton(),p_hb_logo,p_vb_center);
-        p_vb_mainPage.setSpacing(0);
+      
+    HBox p_hb_logo = createLogo();
+    TableView table = createTable();
+    VBox p_vb_center = new VBox();
+    TextField tx = createSearchField();
+    p_vb_center.getChildren().addAll(tx,table);
+    VBox p_vb_mainPage = new VBox(); 
+    p_vb_mainPage.setStyle("-fx-background-color:#abdbe3;");
+    p_vb_mainPage.setSpacing(15);
+    p_vb_mainPage.setPadding(new Insets(20,20,20,20));
+    Button refreshButton = new Button();
+    p_vb_mainPage.getChildren().addAll(createRefreshButton(refreshButton),p_hb_logo,p_vb_center);
+    p_vb_mainPage.setSpacing(0);
 
-        IncomeBook book = new IncomeBook();
+    IncomeBook book = new IncomeBook();
+    
+    table.setItems(book.getCars()); 
+
+
+
+    
+
+
+
+    var scene = new Scene(p_vb_mainPage, 1024, 768);
+    stage.setScene(scene);
+    stage.setMinHeight(768);
+    stage.setMinWidth(1024);
+    stage.setTitle("CASH DESK");
+    stage.show();   
+    FilteredList<Car> filteredlist = new FilteredList<>(book.getCars(), b-> true);
+    tx.textProperty().addListener((Observable, oldValue, newValue)->{
+      filteredlist.setPredicate(car -> {
+        if(newValue == null || newValue.isEmpty()){
+          return true;
+        }
+
+        String text = newValue.toLowerCase();
+        if(car.getId().toLowerCase().indexOf(text) != -1){
+          return true;
+        }else if(car.getCar_number().indexOf(text)!= -1){
+          return true;
+        }else return false;
+      });
+    });
+    table.setItems(filteredlist);
+    new Thread (()->{
+      try {
+        String filename = "CarWash.txt";
+        System.out.println("Im in");
         
-        table.setItems(book.getCars()); 
 
-        var scene = new Scene(p_vb_mainPage, 1024, 768);
-        stage.setScene(scene);
-        stage.setMinHeight(768);
-        stage.setMinWidth(1024);
-        stage.setTitle("CASH DESK");
-        stage.show();   
-        FilteredList<Car> filteredlist = new FilteredList<>(book.getCars(), b-> true);
-        tx.textProperty().addListener((Observable, oldValue, newValue)->{
-          filteredlist.setPredicate(car -> {
-            if(newValue == null || newValue.isEmpty()){
-              return true;
-            }
+        //δημιουργία υποδοχή εξυπηρετή
+  
+       ServerSocket ServerSocket = new ServerSocket(5555);
+       Socket socket = ServerSocket.accept();
+       System.out.println("I accepted it");
+       PrintWriter toClient = new PrintWriter(socket.getOutputStream(), true);
+       ObjectInputStream fromClient = new ObjectInputStream(socket.getInputStream());
 
-            String text = newValue.toLowerCase();
-            if(car.getId().toLowerCase().indexOf(text) != -1){
-              return true;
-            }else if(car.getCar_number().indexOf(text)!= -1){
-              return true;
-            }else return false;
-          });
-        });
-        table.setItems(filteredlist);
+       toClient.println(filename);
+       System.out.println("I send the name's file");
+       try (FileOutputStream fileWriter = new FileOutputStream(filename)) {
+        System.out.println("everything is good");
+        int bufferSize = 10;
+        byte[] fileBytes = new byte[bufferSize];
+
+        int bytesRead = fromClient.read(fileBytes);
+        System.out.println("I got the first bytes");
+        System.out.println(bytesRead);
+        while (bytesRead > 0) {
+            System.out.println(bytesRead);
+            System.out.println("Im getting the file's info");
+            // Write the bytes received to the file
+            fileWriter.write(fileBytes, 0, bytesRead);
+
+            // Read the next group of bytes from the server
+            bytesRead = fromClient.read(fileBytes);
+        }
+      }
+      }catch(IOException ex) {
+        System.out.println(ex);
+      }
+
+    
+   }).start();
+    refreshButton.setOnAction((e)->{
+      
+   });
+   
     }
+ 
+   // Send the filename to the server
+  // toServer.println(filename);
+ 
+   
+   
+   
+   
+
+    
 
     public HBox createLogo(){
       var lb_incBook = new Label("Income Book");
@@ -88,8 +159,7 @@ public class Server extends Application {
       return p_hb_logo;
     }
   
-    public HBox createRefreshButton(){
-      Button refreshButton = new Button();
+    public HBox createRefreshButton(Button refreshButton){
       refreshButton.setPrefSize(60, 60);
       Image im_refresh = new Image(Server.class.getResourceAsStream("img/re2.png"));
       ImageView refresh_icon = new ImageView(im_refresh);

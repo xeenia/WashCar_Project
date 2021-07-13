@@ -2,15 +2,22 @@
 package gr.uop;
 
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.TreeMap;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -42,6 +49,7 @@ import javafx.stage.Stage;
 
 public class Client extends Application {
 
+  
 String stringbuilder ="";
 TableView<Product> listtable;
 int price = 0;
@@ -66,11 +74,16 @@ ObservableList<RadioButton> radiobuttons  = FXCollections.observableArrayList();
 
 
 Stage stage = new Stage();
-ClientFile clientfile = new ClientFile();
+//ClientFile clientfile = new ClientFile();
 CreateFile file = new CreateFile();
-
     @Override
     public void start(Stage stage) {
+
+      
+        
+    
+
+
       this.stage=stage;
       HBox logo = createLogo();
       HBox textPane = new HBox();
@@ -199,7 +212,7 @@ CreateFile file = new CreateFile();
 
       var scene = new Scene(mainPage, 1024, 768);
 
-      //ClientFile();
+      //clientfile.ClientFile();
 
       stage.setScene(scene);
       stage.setMinHeight(768);
@@ -313,7 +326,16 @@ CreateFile file = new CreateFile();
           }
         });
       }  
-    }  
+      
+     
+
+      
+      }
+
+
+
+
+     
 
     // our company's logo
     public HBox createLogo(){
@@ -538,6 +560,8 @@ CreateFile file = new CreateFile();
           car_stage.close();
           second_stage.show();
         }
+
+        
       });
 
       //reset price on close
@@ -634,6 +658,8 @@ CreateFile file = new CreateFile();
           jeep_stage.close();
           second_stage.show();
         }
+
+        
       });
 
       //reset price on close
@@ -1293,9 +1319,45 @@ CreateFile file = new CreateFile();
         System.out.println("An error occurred.");
         e.printStackTrace();
       }
-  }
+      new Thread(()->{
+        System.out.println("local: ");
+        try{
+          
+          Socket socket = new Socket("localhost", 5555);
+          Scanner fromServer = new Scanner(socket.getInputStream());
+          ObjectOutputStream toServer = new ObjectOutputStream(socket.getOutputStream());
+          System.out.println("Im in");
+          String filename = fromServer.nextLine();
+          System.out.println("I took the file's name");
+          try (FileInputStream fileReader = new FileInputStream(filename)) {
+            int bufferSize = 100;
+            byte[] fileBytes = new byte[bufferSize];
+            System.out.println("Im in again");
+            int bytesRead = fileReader.read(fileBytes);
+            while (bytesRead > 0) {
+                System.out.println(bytesRead);
+                System.out.println("Im sending the info's file");
+                // Send bytes back to client
+                toServer.write(fileBytes, 0, bytesRead);
+                System.out.println("I sended the first bytes");
+                // Read next group of bytes
+                bytesRead = fileReader.read(fileBytes);
+            }
+        }
+          socket.close();
+        }catch (IOException ex) {
+          System.out.println(ex);
+        }
+       
+      }).start();
+
+
+    }
+
+  
 
     public static void main(String[] args) {
         launch(args);
+        
     }
 }
