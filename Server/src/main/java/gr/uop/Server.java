@@ -1,10 +1,12 @@
 package gr.uop;
 
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -87,43 +89,32 @@ public class Server extends Application {
       });
     });
     table.setItems(filteredlist);
+    String filename = "CarWash.txt"; 
+    
     new Thread (()->{
       try {
-        String filename = "CarWash.txt";
-        System.out.println("Im in");
-        
-
         //δημιουργία υποδοχή εξυπηρετή
-  
-       ServerSocket ServerSocket = new ServerSocket(5555);
+        ServerSocket ServerSocket = new ServerSocket(5555);
+      while(true){
+        
        Socket socket = ServerSocket.accept();
-       System.out.println("I accepted it");
-       PrintWriter toClient = new PrintWriter(socket.getOutputStream(), true);
-       ObjectInputStream fromClient = new ObjectInputStream(socket.getInputStream());
-
-       toClient.println(filename);
-       System.out.println("I send the name's file");
-       try (FileOutputStream fileWriter = new FileOutputStream(filename)) {
-        System.out.println("everything is good");
-        int bufferSize = 10;
-        byte[] fileBytes = new byte[bufferSize];
-
-        int bytesRead = fromClient.read(fileBytes);
-        System.out.println("I got the first bytes");
-        System.out.println(bytesRead);
-        while (bytesRead > 0) {
-            System.out.println(bytesRead);
-            System.out.println("Im getting the file's info");
-            // Write the bytes received to the file
-            fileWriter.write(fileBytes, 0, bytesRead);
-
-            // Read the next group of bytes from the server
-            bytesRead = fromClient.read(fileBytes);
-        }
+      
+       Scanner fromClient = new Scanner(socket.getInputStream());
+       //παίρνουμε την πληροφορία από τον client
+       String carInfo = fromClient.nextLine();
+       try {
+        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("CarWash.txt", true)));
+        out.println(carInfo);
+        out.close();
+        System.out.println("Successfully wrote to the file.");
+      }catch (IOException e) {
+        System.out.println("An error occurred.");
+        e.printStackTrace();
       }
-      }catch(IOException ex) {
-        System.out.println(ex);
-      }
+    }
+  }catch(IOException ex) {
+    System.out.println(ex);
+  }
 
     
    }).start();

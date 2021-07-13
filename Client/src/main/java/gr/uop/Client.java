@@ -2,6 +2,7 @@
 package gr.uop;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -1320,31 +1321,23 @@ CreateFile file = new CreateFile();
         e.printStackTrace();
       }
       new Thread(()->{
-        System.out.println("local: ");
         try{
-          
+          //μπαινουμε στο αρχειο και διαβάζουμε την πρώτη γραμμή, δηλαδή το αμάξι που μόλις αποθηκευσάμε
+          File file = new File("CarWash.txt");
+          Scanner fileScanner = new Scanner(file);
+          String carInfo=fileScanner.nextLine();
+          //συνδεόμαστε με τον σέρβερ
           Socket socket = new Socket("localhost", 5555);
-          Scanner fromServer = new Scanner(socket.getInputStream());
-          ObjectOutputStream toServer = new ObjectOutputStream(socket.getOutputStream());
-          System.out.println("Im in");
-          String filename = fromServer.nextLine();
-          System.out.println("I took the file's name");
-          try (FileInputStream fileReader = new FileInputStream(filename)) {
-            int bufferSize = 100;
-            byte[] fileBytes = new byte[bufferSize];
-            System.out.println("Im in again");
-            int bytesRead = fileReader.read(fileBytes);
-            while (bytesRead > 0) {
-                System.out.println(bytesRead);
-                System.out.println("Im sending the info's file");
-                // Send bytes back to client
-                toServer.write(fileBytes, 0, bytesRead);
-                System.out.println("I sended the first bytes");
-                // Read next group of bytes
-                bytesRead = fileReader.read(fileBytes);
-            }
-        }
+          PrintWriter toServer = new PrintWriter(socket.getOutputStream(), true);
+          //στέλνουμε την πληροφορία στον σέρβερ
+          toServer.println(carInfo);
+          //κλείνουμε την σύνδεση
           socket.close();
+          //σβήνουμε το αρχείο για να μη ξαναπαίρνουμε την ίδια πληροφορία, κι έτσι κι αλλιώς αφού ο σέρβερ πήρε το αμάξι τότε δεν το χρειαζόμαστε πάλι
+          PrintWriter writer = new PrintWriter(file);
+          writer.print("");
+          // other operations
+          writer.close();
         }catch (IOException ex) {
           System.out.println(ex);
         }
