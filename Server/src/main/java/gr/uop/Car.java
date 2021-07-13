@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Car {
-    private String id;
+    private int id;
     private String arrival_time;
     private String car_number;
     private int cost;
@@ -15,6 +15,15 @@ public class Car {
     private Button acceptButton;
     private Button cancelButton;
     private boolean appear;
+    private String carType;
+
+    public String getCarType() {
+        return this.carType;
+    }
+
+    public void setCarType(String carType) {
+        this.carType = carType;
+    }
 
     public Button getAcceptButton() {
         return this.acceptButton;
@@ -32,11 +41,11 @@ public class Car {
         this.cancelButton = cancelButton;
     }
 
-    public String getId() {
+    public int getId() {
         return this.id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -75,13 +84,14 @@ public class Car {
     Car(){
 
     }
-    Car(String id, String date, String arrival_time, String car_number,int cost){
+    Car(int id, String date, String arrival_time, String car_number,int cost,String carType){
         this.car_number=car_number;
         this.id=id;
         this.date=date;
         this.arrival_time=arrival_time;
         this.cost=cost;
         appear=true;
+        this.carType=carType;
 
         Image acceptIcon = new Image(Server.class.getResourceAsStream("img/entry2.png"));
         accept=new ImageView(acceptIcon); 

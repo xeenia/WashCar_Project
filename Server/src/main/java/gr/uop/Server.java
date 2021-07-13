@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.format.DateTimeFormatter;
 import java.util.Observable;
 import java.util.Scanner;
 import javafx.application.Application;
@@ -58,13 +59,9 @@ public class Server extends Application {
     p_vb_mainPage.setSpacing(0);
 
     IncomeBook book = new IncomeBook();
+    book.getCarsFromFile();
     
     table.setItems(book.getCars()); 
-
-
-
-    
-
 
 
     var scene = new Scene(p_vb_mainPage, 1024, 768);
@@ -81,7 +78,7 @@ public class Server extends Application {
         }
 
         String text = newValue.toLowerCase();
-        if(car.getId().toLowerCase().indexOf(text) != -1){
+        if(String.valueOf(car.getId()).indexOf(text) != -1){
           return true;
         }else if(car.getCar_number().indexOf(text)!= -1){
           return true;
@@ -90,7 +87,10 @@ public class Server extends Application {
     });
     table.setItems(filteredlist);
     String filename = "CarWash.txt"; 
-    
+
+    refreshButton.setOnAction((e)->{
+      book.getCarsFromFile();
+    });
     new Thread (()->{
       try {
         //δημιουργία υποδοχή εξυπηρετή
@@ -104,7 +104,9 @@ public class Server extends Application {
        String carInfo = fromClient.nextLine();
        try {
         PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("CarWash.txt", true)));
-        out.println(carInfo);
+        out.print(carInfo+",");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+        out.println(java.time.LocalDate.now()+","+java.time.LocalTime.now().format(dtf));
         out.close();
         System.out.println("Successfully wrote to the file.");
       }catch (IOException e) {
@@ -118,9 +120,7 @@ public class Server extends Application {
 
     
    }).start();
-    refreshButton.setOnAction((e)->{
-      
-   });
+    
    
     }
  
@@ -180,9 +180,10 @@ public class Server extends Application {
       TableView table = new TableView<>();
       table.setEditable(true);
       table.setPrefHeight(Integer.MAX_VALUE);
-      TableColumn idCol = new TableColumn<Car,String>("ID");
+      TableColumn idCol = new TableColumn<Car,Integer>("ID");
       TableColumn dateCol = new TableColumn<Car,String>("Date");
       TableColumn timeCol = new TableColumn<Car,String>("Time");
+      TableColumn typeCol = new TableColumn<Car,String>("Type");
       TableColumn carCol = new TableColumn<Car,String>("Car Number");
       TableColumn costCol = new TableColumn<Car,Integer>("Cost");
       TableColumn b1Col = new TableColumn<Car,Button>("Acceptance");
@@ -195,6 +196,7 @@ public class Server extends Application {
       costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
       b1Col.setCellValueFactory(new PropertyValueFactory<>("acceptButton"));
       b2Col.setCellValueFactory(new PropertyValueFactory<>("cancelButton"));
+      typeCol.setCellValueFactory(new PropertyValueFactory<>("carType"));
 
       idCol.setStyle("-fx-alignment: CENTER;");
       dateCol.setStyle("-fx-alignment: CENTER;");
@@ -203,17 +205,19 @@ public class Server extends Application {
       costCol.setStyle("-fx-alignment: CENTER;");
       b1Col.setStyle("-fx-alignment: CENTER;");
       b2Col.setStyle("-fx-alignment: CENTER;");
+      typeCol.setStyle("-fx-alignment: CENTER;");
       
       table.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
          
       idCol.minWidthProperty().bind(table.widthProperty().multiply(0.05));
       dateCol.minWidthProperty().bind(table.widthProperty().multiply(.1));
       timeCol.minWidthProperty().bind(table.widthProperty().multiply(.1));
-      carCol.minWidthProperty().bind(table.widthProperty().multiply(.25));
-      costCol.minWidthProperty().bind(table.widthProperty().multiply(.25));
+      carCol.minWidthProperty().bind(table.widthProperty().multiply(.1));
+      costCol.minWidthProperty().bind(table.widthProperty().multiply(.1));
       b1Col.minWidthProperty().bind(table.widthProperty().multiply(.05));
       b2Col.minWidthProperty().bind(table.widthProperty().multiply(.05));
-      table.getColumns().addAll(idCol,dateCol, timeCol, carCol, costCol,b1Col,b2Col);
+      typeCol.minWidthProperty().bind(table.widthProperty().multiply(.1));
+      table.getColumns().addAll(idCol,dateCol, timeCol,typeCol, carCol, costCol,b1Col,b2Col);
       
       return table;
     }
