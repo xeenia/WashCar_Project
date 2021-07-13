@@ -15,6 +15,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.format.DateTimeFormatter;
 import java.util.Observable;
+import java.util.Optional;
 import java.util.Scanner;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -23,11 +24,14 @@ import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -39,12 +43,18 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class Server extends Application {
-  
+  ServerSocket serverSocket;
+      
     @Override
     public void start(Stage stage) {   
-      
+      try {
+        serverSocket = new ServerSocket(5555);
+      } catch (IOException e2) {
+        e2.printStackTrace();
+      }
     HBox p_hb_logo = createLogo();
     TableView table = createTable();
     VBox p_vb_center = new VBox();
@@ -90,40 +100,34 @@ public class Server extends Application {
     refreshButton.setOnAction((e)->{
       book.getCarsFromFile("CarWash.txt",true);
     });
-    new Thread (()->{
-      try {
-        //δημιουργία υποδοχή εξυπηρετή
-        ServerSocket ServerSocket = new ServerSocket(5555);
-      while(true){
-        
-       Socket socket = ServerSocket.accept();
-      
-       Scanner fromClient = new Scanner(socket.getInputStream());
-       //παίρνουμε την πληροφορία από τον client
-       String carInfo = fromClient.nextLine();
-       try {
-        PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("CarWash.txt", true)));
-        PrintWriter out2 = new PrintWriter(new BufferedWriter(new FileWriter("SavedCars.txt", true)));
-        out.print(carInfo+",");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-        out.println(java.time.LocalDate.now()+","+java.time.LocalTime.now().format(dtf));
-        out.close();
-        out2.print(carInfo+",");
-        out2.println(java.time.LocalDate.now()+","+java.time.LocalTime.now().format(dtf));
-        out2.close();
-        System.out.println("Successfully wrote to the file.");
-      }catch (IOException e) {
-        System.out.println("An error occurred.");
-        e.printStackTrace();
-      }
-    }
-  }catch(IOException ex) {
-    System.out.println(ex);
-  }
 
+
+    connect(serverSocket);
     
-   }).start();
-    
+   stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, (e) -> {
+    Alert alert = new Alert(AlertType.CONFIRMATION, "Do you want to close the window?");
+
+    Optional<ButtonType> result = alert.showAndWait();
+
+    if (result.isPresent()) {
+        if (result.get() == ButtonType.OK) {
+            try {
+              connect(serverSocket);
+              serverSocket.close();
+              File carwash = new File("CarWash.txt");
+              PrintWriter writer = new PrintWriter(carwash);
+                writer.print("");
+                writer.close();
+            } catch (IOException e1) {
+              e1.printStackTrace();
+            }
+        }
+        else if (result.get() == ButtonType.CANCEL) {
+            System.out.println("Cancel");
+            e.consume();
+        }
+   }
+});
    
     }
  
@@ -135,7 +139,42 @@ public class Server extends Application {
    
    
 
-    
+    public void connect(ServerSocket serversocket){
+      new Thread (()->{
+        try {
+          //δημιουργία υποδοχή εξυπηρετή
+          
+          
+        while(true){
+          
+         Socket socket = serverSocket.accept();
+        
+         Scanner fromClient = new Scanner(socket.getInputStream());
+         //παίρνουμε την πληροφορία από τον client
+         String carInfo = fromClient.nextLine();
+         try {
+          PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("CarWash.txt", true)));
+          PrintWriter out2 = new PrintWriter(new BufferedWriter(new FileWriter("SavedCars.txt", true)));
+          out.print(carInfo+",");
+          DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+          out.println(java.time.LocalDate.now()+","+java.time.LocalTime.now().format(dtf));
+          out.close();
+          out2.print(carInfo+",");
+          out2.println(java.time.LocalDate.now()+","+java.time.LocalTime.now().format(dtf));
+          out2.close();
+          System.out.println("Successfully wrote to the file.");
+        }catch (IOException e) {
+          System.out.println("An error occurred.");
+          e.printStackTrace();
+        }
+      }
+    }catch(IOException ex) {
+      System.out.println(ex);
+    }
+  
+      
+     }).start();
+    }
 
     public HBox createLogo(){
       var lb_incBook = new Label("Income Book");
