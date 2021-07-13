@@ -13,10 +13,11 @@ public class IncomeBook {
     int lastID;
     IncomeBook(){
         lastID=0;
+        getCarsFromFile("SavedCars.txt");
     }
-    public void getCarsFromFile(){
+    public void getCarsFromFile(String filename){
         try {
-            File myObj = new File("CarWash.txt");
+            File myObj = new File(filename);
             Scanner myReader = new Scanner(myObj);
             
             while (myReader.hasNextLine()) {

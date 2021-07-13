@@ -59,7 +59,6 @@ public class Server extends Application {
     p_vb_mainPage.setSpacing(0);
 
     IncomeBook book = new IncomeBook();
-    book.getCarsFromFile();
     
     table.setItems(book.getCars()); 
 
@@ -89,7 +88,7 @@ public class Server extends Application {
     String filename = "CarWash.txt"; 
 
     refreshButton.setOnAction((e)->{
-      book.getCarsFromFile();
+      book.getCarsFromFile("CarWash.txt");
     });
     new Thread (()->{
       try {
@@ -104,10 +103,14 @@ public class Server extends Application {
        String carInfo = fromClient.nextLine();
        try {
         PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("CarWash.txt", true)));
+        PrintWriter out2 = new PrintWriter(new BufferedWriter(new FileWriter("SavedCars.txt", true)));
         out.print(carInfo+",");
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
         out.println(java.time.LocalDate.now()+","+java.time.LocalTime.now().format(dtf));
         out.close();
+        out2.print(carInfo+",");
+        out2.println(java.time.LocalDate.now()+","+java.time.LocalTime.now().format(dtf));
+        out2.close();
         System.out.println("Successfully wrote to the file.");
       }catch (IOException e) {
         System.out.println("An error occurred.");
