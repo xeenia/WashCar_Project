@@ -13,9 +13,9 @@ public class IncomeBook {
     int lastID;
     IncomeBook(){
         lastID=0;
-        getCarsFromFile("SavedCars.txt");
+        getCarsFromFile("SavedCars.txt",false);
     }
-    public void getCarsFromFile(String filename){
+    public void getCarsFromFile(String filename,boolean delete){
         try {
             File myObj = new File(filename);
             Scanner myReader = new Scanner(myObj);
@@ -32,11 +32,15 @@ public class IncomeBook {
               Car car = new Car(lastID++,date,time,car_number,cost,type);
               addCar(car);
             }
+
             myReader.close();
-            PrintWriter writer = new PrintWriter(myObj);
-          writer.print("");
-          // other operations
-          writer.close();
+            if(delete){
+                PrintWriter writer = new PrintWriter(myObj);
+                writer.print("");
+                // other operations
+                writer.close();
+            }
+            
           } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();

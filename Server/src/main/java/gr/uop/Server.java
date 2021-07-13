@@ -88,7 +88,7 @@ public class Server extends Application {
     String filename = "CarWash.txt"; 
 
     refreshButton.setOnAction((e)->{
-      book.getCarsFromFile("CarWash.txt");
+      book.getCarsFromFile("CarWash.txt",true);
     });
     new Thread (()->{
       try {
