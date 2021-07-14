@@ -3,24 +3,18 @@ package gr.uop;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.format.DateTimeFormatter;
-import java.util.Observable;
 import java.util.Optional;
 import java.util.Scanner;
+
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -28,13 +22,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
+
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -55,8 +49,9 @@ public class Server extends Application {
       } catch (IOException e2) {
         e2.printStackTrace();
       }
+    IncomeBook book = new IncomeBook();
     HBox p_hb_logo = createLogo();
-    TableView table = createTable();
+    TableView table = book.createTable();
     VBox p_vb_center = new VBox();
     TextField tx = createSearchField();
     p_vb_center.getChildren().addAll(tx,table);
@@ -68,7 +63,6 @@ public class Server extends Application {
     p_vb_mainPage.getChildren().addAll(createRefreshButton(refreshButton),p_hb_logo,p_vb_center);
     p_vb_mainPage.setSpacing(0);
 
-    IncomeBook book = new IncomeBook();
     
     table.setItems(book.getCars()); 
 
@@ -130,9 +124,7 @@ public class Server extends Application {
 });
    
     }
- 
-   // Send the filename to the server
-  // toServer.println(filename);
+
  
    
    
@@ -218,51 +210,7 @@ public class Server extends Application {
           p_bp_search.setLeft(tf_search);         
           return tf_search;
     }
-    public TableView createTable(){
-      TableView table = new TableView<>();
-      table.setEditable(true);
-      table.setPrefHeight(Integer.MAX_VALUE);
-      TableColumn idCol = new TableColumn<Car,Integer>("ID");
-      TableColumn dateCol = new TableColumn<Car,String>("Date");
-      TableColumn timeCol = new TableColumn<Car,String>("Time");
-      TableColumn typeCol = new TableColumn<Car,String>("Type");
-      TableColumn carCol = new TableColumn<Car,String>("Car Number");
-      TableColumn costCol = new TableColumn<Car,Integer>("Cost");
-      TableColumn b1Col = new TableColumn<Car,Button>("Acceptance");
-      TableColumn b2Col = new TableColumn<Car,Button>("Annulment");
-
-      idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-      dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
-      timeCol.setCellValueFactory(new PropertyValueFactory<>("arrival_time"));
-      carCol.setCellValueFactory(new PropertyValueFactory<>("car_number"));
-      costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
-      b1Col.setCellValueFactory(new PropertyValueFactory<>("acceptButton"));
-      b2Col.setCellValueFactory(new PropertyValueFactory<>("cancelButton"));
-      typeCol.setCellValueFactory(new PropertyValueFactory<>("carType"));
-
-      idCol.setStyle("-fx-alignment: CENTER;");
-      dateCol.setStyle("-fx-alignment: CENTER;");
-      timeCol.setStyle("-fx-alignment: CENTER;");
-      carCol.setStyle("-fx-alignment: CENTER;");
-      costCol.setStyle("-fx-alignment: CENTER;");
-      b1Col.setStyle("-fx-alignment: CENTER;");
-      b2Col.setStyle("-fx-alignment: CENTER;");
-      typeCol.setStyle("-fx-alignment: CENTER;");
-      
-      table.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
-         
-      idCol.minWidthProperty().bind(table.widthProperty().multiply(0.05));
-      dateCol.minWidthProperty().bind(table.widthProperty().multiply(.1));
-      timeCol.minWidthProperty().bind(table.widthProperty().multiply(.1));
-      carCol.minWidthProperty().bind(table.widthProperty().multiply(.1));
-      costCol.minWidthProperty().bind(table.widthProperty().multiply(.1));
-      b1Col.minWidthProperty().bind(table.widthProperty().multiply(.05));
-      b2Col.minWidthProperty().bind(table.widthProperty().multiply(.05));
-      typeCol.minWidthProperty().bind(table.widthProperty().multiply(.1));
-      table.getColumns().addAll(idCol,dateCol, timeCol,typeCol, carCol, costCol,b1Col,b2Col);
-      
-      return table;
-    }
+    
     public static void main(String[] args) {
         launch(args);
     }
