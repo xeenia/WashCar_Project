@@ -204,7 +204,7 @@ public class Server extends Application {
   
     public TextField createSearchField(){
           TextField tf_search = new TextField();
-          tf_search.setPromptText("Search for ID or Car Number");
+          tf_search.setPromptText("Αναζητήστε ID, Αριθμό Πινακίδας ή Όχημα");
           tf_search.setPrefWidth(210);
           BorderPane p_bp_search = new BorderPane();
           p_bp_search.setLeft(tf_search);         

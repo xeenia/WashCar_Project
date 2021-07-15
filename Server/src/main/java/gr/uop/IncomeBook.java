@@ -65,11 +65,11 @@ public class IncomeBook {
         table.setEditable(true);
         table.setPrefHeight(Integer.MAX_VALUE);
         TableColumn idCol = new TableColumn<Car,Integer>("ID");
-        TableColumn dateCol = new TableColumn<Car,String>("Date");
-        TableColumn timeCol = new TableColumn<Car,String>("Time");
-        TableColumn typeCol = new TableColumn<Car,String>("Type");
-        TableColumn carCol = new TableColumn<Car,String>("Car Number");
-        TableColumn costCol = new TableColumn<Car,Integer>("Cost");
+        TableColumn dateCol = new TableColumn<Car,String>("Ημερομηνία");
+        TableColumn timeCol = new TableColumn<Car,String>("Ώρα");
+        TableColumn typeCol = new TableColumn<Car,String>("Όχημα");
+        TableColumn carCol = new TableColumn<Car,String>("Αριθμός Πινακίδας");
+        TableColumn costCol = new TableColumn<Car,Integer>("Κόστος");
   
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
@@ -80,8 +80,8 @@ public class IncomeBook {
         typeCol.setCellValueFactory(new PropertyValueFactory<>("carType"));
   
         //delete button functionality
-        TableColumn<Car, Car> b2Col = new TableColumn<>("Annulment");
-        TableColumn<Car,Car> b1Col = new TableColumn<>("Acceptance");
+        TableColumn<Car, Car> b2Col = new TableColumn<>("Ακύρωση");
+        TableColumn<Car,Car> b1Col = new TableColumn<>("Πληρωμή");
         b2Col.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
         );
@@ -89,8 +89,11 @@ public class IncomeBook {
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
         );
         b2Col.setCellFactory(param -> new TableCell<Car,Car>() {
-            Button deleteButton = new Button("Delete");
+            Button deleteButton = new Button();
+            Image im_refresh = new Image(Server.class.getResourceAsStream("img/deleteIconBlack.png"));
+            ImageView refresh_icon = new ImageView(im_refresh);
             
+         
             @Override
             protected void updateItem(Car car, boolean empty) {
                 super.updateItem(car, empty);
@@ -99,14 +102,19 @@ public class IncomeBook {
                     setGraphic(null);
                     return;
                 }
-        
+                deleteButton.setGraphic(refresh_icon);
                 setGraphic(deleteButton);
+                deleteButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;");
+                refresh_icon.setFitHeight(20);
+                refresh_icon.setFitWidth(20);
+                deleteButton.setOnMousePressed(event -> deleteButton.setStyle("-fx-background-color: transparent; -fx-padding: 3 1 1 3;"));
+                 deleteButton.setOnMouseReleased(event -> deleteButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;"));
                 deleteButton.setOnAction((e)->{
                     //ενημερώνουμε ότι θα διαγραφεί τελείως το αμάξι 
                     Alert alert = new Alert(AlertType.INFORMATION);
                     alert.setTitle("WARNING");
-                    alert.setContentText("WARNING! If you proceed then this car will completely be deleted.");
-                    alert.setHeaderText("CAR INFO:"+"\n"+"\nTYPE: "+car.getCarType()+"\nNUMBER: "+car.getCar_number()+"\nCOST: "+car.getCost());
+                    alert.setContentText("ΠΡΟΕΙΔΟΠΟΙΣΗ! Αν συνεχίσετε τότε το όχημα θα διαγραφεί από το σύστημα.");
+                    alert.setHeaderText("ΠΛΗΡΟΦΟΡΊΕΣ ΟΧΉΜΑΤΟΣ:"+"\n"+"\nΟΧΗΜΑ "+car.getCarType()+"\nΠΙΝΑΚΙΔΑ "+car.getCar_number());
         
                     alert.initModality(Modality.WINDOW_MODAL);
                     alert.getButtonTypes().add(ButtonType.CANCEL);
@@ -127,8 +135,9 @@ public class IncomeBook {
 
 
         b1Col.setCellFactory(param -> new TableCell<Car,Car>() {
-            Button acceptButton = new Button("Payment");
-            
+            Button acceptButton = new Button();
+            Image im_refresh = new Image(Server.class.getResourceAsStream("img/payIconReceiptBlack.png"));
+            ImageView refresh_icon = new ImageView(im_refresh);
             @Override
             protected void updateItem(Car car, boolean empty) {
                 super.updateItem(car, empty);
@@ -138,7 +147,14 @@ public class IncomeBook {
                     return;
                 }
         
+                acceptButton.setGraphic(refresh_icon);
                 setGraphic(acceptButton);
+                
+                acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;");
+                refresh_icon.setFitHeight(20);
+                refresh_icon.setFitWidth(20);
+                acceptButton.setOnMousePressed(event -> acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 3 1 1 3;"));
+                acceptButton.setOnMouseReleased(event -> acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;"));
                 acceptButton.setOnAction((e)->{
 
                     //LOGO
