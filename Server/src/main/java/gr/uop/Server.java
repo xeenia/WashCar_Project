@@ -101,7 +101,7 @@ public class Server extends Application {
     connect(serverSocket);
     
    stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, (e) -> {
-    Alert alert = new Alert(AlertType.CONFIRMATION, "Do you want to close the window?");
+    Alert alert = new Alert(AlertType.CONFIRMATION, "Είστε σίγουροι ότι θέλετε να κλείσετε το πρόγραμμα;");
 
     Optional<ButtonType> result = alert.showAndWait();
 
