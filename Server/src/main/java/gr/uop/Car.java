@@ -10,9 +10,16 @@ public class Car {
     private String car_number;
     private int cost;
     private String date;
-    private ImageView accept;
-    private Button acceptButton;
     private String carType;
+    private String services;
+
+    public String getServices() {
+        return this.services;
+    }
+
+    public void setServices(String services) {
+        this.services = services;
+    }
 
     public String getCarType() {
         return this.carType;
@@ -20,17 +27,7 @@ public class Car {
 
     public void setCarType(String carType) {
         this.carType = carType;
-    }
-
-    public Button getAcceptButton() {
-        return this.acceptButton;
-    }
-
-    public void setAcceptButton(Button acceptButton) {
-        this.acceptButton = acceptButton;
-    }
-
-    
+    }    
 
     public int getId() {
         return this.id;
@@ -75,25 +72,14 @@ public class Car {
     Car(){
 
     }
-    Car(int id, String date, String arrival_time, String car_number,int cost,String carType){
+    Car(int id, String date, String arrival_time, String car_number,int cost,String carType,String services){
         this.car_number=car_number;
         this.id=id;
         this.date=date;
         this.arrival_time=arrival_time;
         this.cost=cost;
         this.carType=carType;
-
-        Image acceptIcon = new Image(Server.class.getResourceAsStream("img/entry2.png"));
-        accept=new ImageView(acceptIcon); 
-        accept.setFitHeight(20);
-        accept.setFitWidth(20);
-        acceptButton = new Button();
-        acceptButton.setGraphic(accept);
-        
-        acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;");
-        acceptButton.setOnMousePressed(event -> acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 3 1 1 3;"));
-        acceptButton.setOnMouseReleased(event -> acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;"));
-
+        this.services=services;
     }
 
    
