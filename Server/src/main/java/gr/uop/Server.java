@@ -83,7 +83,9 @@ public class Server extends Application {
         String text = newValue.toLowerCase();
         if(String.valueOf(car.getId()).indexOf(text) != -1){
           return true;
-        }else if(car.getCar_number().indexOf(text)!= -1){
+        }else if(car.getCar_number().toLowerCase().indexOf(text)!= -1){
+          return true;
+        }else if(car.getCarType().toLowerCase().indexOf(text)!= -1){
           return true;
         }else return false;
       });
