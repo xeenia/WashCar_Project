@@ -54,10 +54,12 @@ public class IncomeBook {
     String s_Motor_Labels[]={"6","0","0","8","0","0","0","40","10","0"};
     private ObservableList<Car> cars = FXCollections.observableArrayList();     
     TableView table = new TableView<>(); 
+    int inc;
     int lastID;
     IncomeBook(){
         lastID=0;
         getCarsFromFile("SavedCars.txt",false);
+        inc=1;
     }
 
     public TableView createTable(){
@@ -169,7 +171,10 @@ public class IncomeBook {
                     //ΠΛΗΡΟΦΟΡΙΕΣ ΟΧΗΜΑΤΟΣ ΚΑΙ ΑΠΟΔΕΙΞΗΣ
                     BorderPane p_hb_info = new BorderPane();
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+                    String depTime = java.time.LocalTime.now().format(dtf);
 
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
+                    String depDate = java.time.LocalDate.now().format(formatter);
                     Text t_carInfo = new Text("Όχημα: "+car.getCarType()+"\nΠινακίδα: "+ 
                     car.getCar_number()+"\nΑναχώρηση:\n"+car.getDate()+"\n" +car.getArrival_time());
                     Font font = Font.font("Verdana", FontWeight.BOLD,10);
@@ -179,7 +184,7 @@ public class IncomeBook {
                     int int_random = rand.nextInt(upperbound);  
                     Text t_receiptInfo = new Text("INVOICE #"+ int_random+ 
                     "\nΑποχώριση:\n" 
-                    +java.time.LocalDate.now() +"\n"+ java.time.LocalTime.now().format(dtf));
+                    +depDate +"\n"+ depTime);
                     t_receiptInfo.setFont(font);
                     p_hb_info.setLeft(t_carInfo);
                     p_hb_info.setRight(t_receiptInfo);
@@ -309,7 +314,30 @@ public class IncomeBook {
                     var scene2 = new Scene(p_bp_main,500,600);
                     Stage stage2 = new Stage();
                     stage2.setScene(scene2);
-                    stage2.show();              
+                    stage2.show();      
+                
+                    b_payButton.setOnAction((b1)->{
+                        File file = new File("IncomeBook.txt");
+                        char c='|';
+                        char t='\t';
+                        try {
+                            
+                            FileWriter fileWriter = new FileWriter(file, true);
+                           
+                            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                            bufferedWriter.write(car.getCarType()+","+car.getCar_number()+","+car.getServices()+","+car.getDate()+","+car.getArrival_time()+","+depDate+","+depTime+System.getProperty("line.separator"));
+                            bufferedWriter.close();
+                            deleteCar(car.getId());
+                            stage2.close();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                       
+                    });
+
+                    b_cancelButton.setOnAction((b2)->{
+                        stage2.close();
+                    });
                 });
             }
         });
