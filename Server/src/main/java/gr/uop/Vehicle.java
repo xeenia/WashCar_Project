@@ -1,9 +1,5 @@
 package gr.uop;
 
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
 public class Vehicle {
     private int id;
     private String arrival_time;
@@ -69,9 +65,6 @@ public class Vehicle {
         this.date = date;
     }
 
-    Vehicle(){
-
-    }
     Vehicle(int id, String date, String arrival_time, String vehicle_number,int cost,String vehicleType,String services){
         this.vehicle_number=vehicle_number;
         this.id=id;

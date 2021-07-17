@@ -11,11 +11,18 @@ import java.util.Scanner;
 
 public class Connection {
     ServerSocket serverSocket;
-    Connection(ServerSocket serverSocket){
-        this.serverSocket=serverSocket;
+    Connection(){
+      try {
+        serverSocket = new ServerSocket(5555);
+      } catch (IOException e2) {
+        e2.printStackTrace();
+      }
     }
-
+    public void closeConnection() throws IOException{
+      serverSocket.close();
+    }
     public void makeConnection(){
+      
         new Thread (()->{
             try {
               

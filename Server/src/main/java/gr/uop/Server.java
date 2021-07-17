@@ -1,51 +1,28 @@
 package gr.uop;
 
-
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-import java.util.Scanner;
 import javafx.application.Application;
 import javafx.collections.transformation.FilteredList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class Server extends Application {
-  ServerSocket serverSocket;
       
     @Override
     public void start(Stage stage) {   
-      try {
-        serverSocket = new ServerSocket(5555);
-      } catch (IOException e2) {
-        e2.printStackTrace();
-      }
-    Connection connection = new Connection(serverSocket);
+    Connection connection = new Connection();
     IncomeBook book = new IncomeBook();
     mainUI ui = new mainUI();
     
@@ -55,14 +32,9 @@ public class Server extends Application {
     TableView table = book.createTable();
     table.setItems(book.getCars()); 
     p_vb_center.getChildren().addAll(tx,table);
-    VBox p_vb_mainPage = new VBox(); 
-    p_vb_mainPage.setStyle("-fx-background-color:#abdbe3;");
-    p_vb_mainPage.setSpacing(15);
-    p_vb_mainPage.setPadding(new Insets(20,20,20,20));
+    VBox p_vb_mainPage = ui.createMainPage();
     Button refreshButton = new Button();
     p_vb_mainPage.getChildren().addAll(ui.createRefreshButton(refreshButton),p_hb_logo,p_vb_center);
-    p_vb_mainPage.setSpacing(0);
-
     var scene = new Scene(p_vb_mainPage, 1024, 768);
     stage.setScene(scene);
     stage.setMinHeight(768);
@@ -76,7 +48,6 @@ public class Server extends Application {
         if(newValue == null || newValue.isEmpty()){
           return true;
         }
-
         String text = newValue.toLowerCase();
         if(String.valueOf(car.getId()).indexOf(text) != -1){
           return true;
@@ -98,14 +69,11 @@ public class Server extends Application {
     
    stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, (e) -> {
     Alert alert = new Alert(AlertType.CONFIRMATION, "Είστε σίγουροι ότι θέλετε να κλείσετε το πρόγραμμα;");
-
     Optional<ButtonType> result = alert.showAndWait();
-
     if (result.isPresent()) {
         if (result.get() == ButtonType.OK) {
             try {
-        
-              serverSocket.close();
+              connection.closeConnection();
               File carwash = new File("CarWash.txt");
               PrintWriter writer = new PrintWriter(carwash);
               writer.print("");
@@ -121,11 +89,7 @@ public class Server extends Application {
    }
 });
    
-    }
-
-
-
-    
+    }  
     
     public static void main(String[] args) {
         launch(args);

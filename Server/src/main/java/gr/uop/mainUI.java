@@ -10,16 +10,22 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class mainUI {
     
+    mainUI(){}
 
-
-    mainUI(){
-        
+    public VBox createMainPage(){
+      VBox p_vb_mainPage = new VBox(); 
+      p_vb_mainPage.setStyle("-fx-background-color:#abdbe3;");
+      p_vb_mainPage.setSpacing(15);
+      p_vb_mainPage.setPadding(new Insets(20,20,20,20)); 
+      p_vb_mainPage.setSpacing(0);
+      return p_vb_mainPage;
     }
     public HBox createLogo(){
         var lb_incBook = new Label("Income Book");

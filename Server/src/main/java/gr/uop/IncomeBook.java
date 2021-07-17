@@ -10,8 +10,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-import java.util.Random;
+
 import java.util.Scanner;
+import java.util.Random;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -81,7 +82,7 @@ public class IncomeBook {
         
         typeCol.setCellValueFactory(new PropertyValueFactory<>("vehicleType"));
   
-        //delete button functionality
+        //delete_button functionality
         TableColumn<Vehicle, Vehicle> b2Col = new TableColumn<>("Ακύρωση");
         TableColumn<Vehicle,Vehicle> b1Col = new TableColumn<>("Πληρωμή");
         b2Col.setCellValueFactory(
@@ -141,10 +142,10 @@ public class IncomeBook {
             Image im_refresh = new Image(Server.class.getResourceAsStream("img/payIconReceiptBlack.png"));
             ImageView refresh_icon = new ImageView(im_refresh);
             @Override
-            protected void updateItem(Vehicle car, boolean empty) {
-                super.updateItem(car, empty);
+            protected void updateItem(Vehicle vehicle, boolean empty) {
+                super.updateItem(vehicle, empty);
                 
-                if (car == null) {
+                if (vehicle == null) {
                     setGraphic(null);
                     return;
                 }
@@ -158,7 +159,12 @@ public class IncomeBook {
                 acceptButton.setOnMousePressed(event -> acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 3 1 1 3;"));
                 acceptButton.setOnMouseReleased(event -> acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;"));
                 acceptButton.setOnAction((e)->{
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+                    String depTime = java.time.LocalTime.now().format(dtf);
 
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
+                    String depDate = java.time.LocalDate.now().format(formatter);
+                   
                     //LOGO
                     Pane p_logo = new Pane();
                     p_logo.setStyle("-fx-background-color:#abdbe3;");
@@ -167,16 +173,12 @@ public class IncomeBook {
                     iv_logo.setFitHeight(100);
                     iv_logo.setFitWidth(150);
                     p_logo.getChildren().add(iv_logo);
+                    
 
                     //ΠΛΗΡΟΦΟΡΙΕΣ ΟΧΗΜΑΤΟΣ ΚΑΙ ΑΠΟΔΕΙΞΗΣ
                     BorderPane p_hb_info = new BorderPane();
-                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-                    String depTime = java.time.LocalTime.now().format(dtf);
-
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
-                    String depDate = java.time.LocalDate.now().format(formatter);
-                    Text t_carInfo = new Text("Όχημα: "+car.getVehicleType()+"\nΠινακίδα: "+ 
-                    car.getVehicle_number()+"\nΑναχώρηση:\n"+car.getDate()+"\n" +car.getArrival_time());
+                    Text t_carInfo = new Text("Όχημα: "+vehicle.getVehicleType()+"\nΠινακίδα: "+ 
+                    vehicle.getVehicle_number()+"\nΑναχώρηση:\n"+vehicle.getDate()+"\n" +vehicle.getArrival_time());
                     Font font = Font.font("Verdana", FontWeight.BOLD,10);
                     t_carInfo.setFont(font);
                     Random rand = new Random(); 
@@ -190,20 +192,16 @@ public class IncomeBook {
                     p_hb_info.setRight(t_receiptInfo);
                     p_hb_info.setPadding(new Insets(10));
                     p_hb_info.setStyle("-fx-background-color:#ffffff;");
-
-
                     SplitPane sp = new SplitPane();
 
-
                     //ΠΛΗΡΟΦΟΡΙΕΣ ΥΠΗΡΕΣΙΩΝ
-                    BorderPane p_hb_receiptInfo = new BorderPane();
-                    p_hb_receiptInfo.setStyle("-fx-background-color:#ffffff;");
+                    
                     BorderPane p_hb_amount = new BorderPane();
                     Pane p_color = new Pane();
                     p_color.setStyle("-fx-background-color:#abdbe3;");
                     VBox p_cost = new VBox();
                     p_cost.setPadding(new Insets(5,10,5,10));
-                    Text t_cost = new Text(String.valueOf(car.getCost())+" €");
+                    Text t_cost = new Text(String.valueOf(vehicle.getCost())+" €");
                     
                     t_cost.setStyle("-fx-font-size: 40;");
                     t_cost.setFill(Color.WHITE);
@@ -218,6 +216,7 @@ public class IncomeBook {
                     p_hb_amount.setRight(p_cost);
 
                     //plhrofories services
+                    BorderPane p_hb_receiptInfo = new BorderPane();
                     Text t_service = new Text("Υπηρεσία");
                     t_service.setStyle("-fx-font-weight: bold; -fx-font-size:13;");
                     Text t_serviceInfo = new Text("Πληροφορίες");
@@ -241,7 +240,7 @@ public class IncomeBook {
                     p_vb_price.setAlignment(Pos.CENTER);
                     p_vb_price.setSpacing(5);
 
-                    String services[] = car.getServices().split("-");
+                    String services[] = vehicle.getServices().split("-");
                     int size = services.length;
                     Text v1 = new Text();
                     Text v2 = new Text();
@@ -252,9 +251,9 @@ public class IncomeBook {
                         String n = ((Integer.parseInt(services[i]))!=10)?"0":"";
                         s1=s1.concat(n+services[i]+((i==size-1)?"":"\n"));
                         s2=s2.concat(s_Labels[Integer.parseInt(services[i])-1]+((i==size-1)?"":"\n"));
-                        if(car.getVehicleType().contains("Car")){
+                        if(vehicle.getVehicleType().contains("Car")){
                         s3= s3.concat(s_Car_Labels[Integer.parseInt(services[i])-1]+" €"+((i==size-1)?"":"\n"));
-                        }else if(car.getVehicleType().contains("Jeep")){
+                        }else if(vehicle.getVehicleType().contains("Jeep")){
                             s3=s3.concat(s_Jeep_Labels[Integer.parseInt(services[i])-1]+" €"+((i==size-1)?"":"\n"));
                         }else{
                         s3= s3.concat(s_Motor_Labels[Integer.parseInt(services[i])-1]+" €"+((i==size-1)?"":"\n"));
@@ -330,9 +329,9 @@ public class IncomeBook {
                             FileWriter fileWriter = new FileWriter(file, true);
                            
                             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                            bufferedWriter.write(car.getVehicleType()+","+car.getVehicle_number()+","+car.getServices()+","+car.getDate()+","+car.getArrival_time()+","+depDate+","+depTime+System.getProperty("line.separator"));
+                            bufferedWriter.write(vehicle.getVehicleType()+","+vehicle.getVehicle_number()+","+vehicle.getServices()+","+vehicle.getDate()+","+vehicle.getArrival_time()+","+depDate+","+depTime+System.getProperty("line.separator"));
                             bufferedWriter.close();
-                            deleteCar(car.getId());
+                            deleteCar(vehicle.getId());
                             stage2.close();
                         } catch (IOException e1) {
                             e1.printStackTrace();
@@ -469,8 +468,5 @@ public class IncomeBook {
             i++;
         }
         return i;
-    }
-    public void searchCar(int id){
-
     }
 }
