@@ -7,10 +7,10 @@ import javafx.scene.image.ImageView;
 public class Vehicle {
     private int id;
     private String arrival_time;
-    private String car_number;
+    private String vehicle_number;
     private int cost;
     private String date;
-    private String carType;
+    private String vehicleType;
     private String services;
 
     public String getServices() {
@@ -21,12 +21,12 @@ public class Vehicle {
         this.services = services;
     }
 
-    public String getCarType() {
-        return this.carType;
+    public String getVehicleType() {
+        return this.vehicleType;
     }
 
-    public void setCarType(String carType) {
-        this.carType = carType;
+    public void setVehicleType(String carType) {
+        this.vehicleType = carType;
     }    
 
     public int getId() {
@@ -45,12 +45,12 @@ public class Vehicle {
         this.arrival_time = arrival_time;
     }
 
-    public String getCar_number() {
-        return this.car_number;
+    public String getVehicle_number() {
+        return this.vehicle_number;
     }
 
-    public void setCar_number(String car_number) {
-        this.car_number = car_number;
+    public void setVehicle_number(String car_number) {
+        this.vehicle_number = car_number;
     }
 
     public int getCost() {
@@ -72,13 +72,13 @@ public class Vehicle {
     Vehicle(){
 
     }
-    Vehicle(int id, String date, String arrival_time, String car_number,int cost,String carType,String services){
-        this.car_number=car_number;
+    Vehicle(int id, String date, String arrival_time, String vehicle_number,int cost,String vehicleType,String services){
+        this.vehicle_number=vehicle_number;
         this.id=id;
         this.date=date;
         this.arrival_time=arrival_time;
         this.cost=cost;
-        this.carType=carType;
+        this.vehicleType=vehicleType;
         this.services=services;
     }
 

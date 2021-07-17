@@ -76,10 +76,10 @@ public class IncomeBook {
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
         timeCol.setCellValueFactory(new PropertyValueFactory<>("arrival_time"));
-        carCol.setCellValueFactory(new PropertyValueFactory<>("car_number"));
+        carCol.setCellValueFactory(new PropertyValueFactory<>("vehicle_number"));
         costCol.setCellValueFactory(new PropertyValueFactory<>("cost"));
         
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("carType"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("vehicleType"));
   
         //delete button functionality
         TableColumn<Vehicle, Vehicle> b2Col = new TableColumn<>("Ακύρωση");
@@ -116,7 +116,7 @@ public class IncomeBook {
                     Alert alert = new Alert(AlertType.INFORMATION);
                     alert.setTitle("WARNING");
                     alert.setContentText("ΠΡΟΕΙΔΟΠΟΙΣΗ! Αν συνεχίσετε τότε το όχημα θα διαγραφεί από το σύστημα.");
-                    alert.setHeaderText("ΠΛΗΡΟΦΟΡΊΕΣ ΟΧΉΜΑΤΟΣ:"+"\n"+"\nΟΧΗΜΑ "+car.getCarType()+"\nΠΙΝΑΚΙΔΑ "+car.getCar_number());
+                    alert.setHeaderText("ΠΛΗΡΟΦΟΡΊΕΣ ΟΧΉΜΑΤΟΣ:"+"\n"+"\nΟΧΗΜΑ "+car.getVehicleType()+"\nΠΙΝΑΚΙΔΑ "+car.getVehicle_number());
         
                     alert.initModality(Modality.WINDOW_MODAL);
                     alert.getButtonTypes().add(ButtonType.CANCEL);
@@ -175,8 +175,8 @@ public class IncomeBook {
 
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
                     String depDate = java.time.LocalDate.now().format(formatter);
-                    Text t_carInfo = new Text("Όχημα: "+car.getCarType()+"\nΠινακίδα: "+ 
-                    car.getCar_number()+"\nΑναχώρηση:\n"+car.getDate()+"\n" +car.getArrival_time());
+                    Text t_carInfo = new Text("Όχημα: "+car.getVehicleType()+"\nΠινακίδα: "+ 
+                    car.getVehicle_number()+"\nΑναχώρηση:\n"+car.getDate()+"\n" +car.getArrival_time());
                     Font font = Font.font("Verdana", FontWeight.BOLD,10);
                     t_carInfo.setFont(font);
                     Random rand = new Random(); 
@@ -252,9 +252,9 @@ public class IncomeBook {
                         String n = ((Integer.parseInt(services[i]))!=10)?"0":"";
                         s1=s1.concat(n+services[i]+((i==size-1)?"":"\n"));
                         s2=s2.concat(s_Labels[Integer.parseInt(services[i])-1]+((i==size-1)?"":"\n"));
-                        if(car.getCarType().contains("Car")){
+                        if(car.getVehicleType().contains("Car")){
                         s3= s3.concat(s_Car_Labels[Integer.parseInt(services[i])-1]+" €"+((i==size-1)?"":"\n"));
-                        }else if(car.getCarType().contains("Jeep")){
+                        }else if(car.getVehicleType().contains("Jeep")){
                             s3=s3.concat(s_Jeep_Labels[Integer.parseInt(services[i])-1]+" €"+((i==size-1)?"":"\n"));
                         }else{
                         s3= s3.concat(s_Motor_Labels[Integer.parseInt(services[i])-1]+" €"+((i==size-1)?"":"\n"));
@@ -330,7 +330,7 @@ public class IncomeBook {
                             FileWriter fileWriter = new FileWriter(file, true);
                            
                             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                            bufferedWriter.write(car.getCarType()+","+car.getCar_number()+","+car.getServices()+","+car.getDate()+","+car.getArrival_time()+","+depDate+","+depTime+System.getProperty("line.separator"));
+                            bufferedWriter.write(car.getVehicleType()+","+car.getVehicle_number()+","+car.getServices()+","+car.getDate()+","+car.getArrival_time()+","+depDate+","+depTime+System.getProperty("line.separator"));
                             bufferedWriter.close();
                             deleteCar(car.getId());
                             stage2.close();
@@ -458,7 +458,7 @@ public class IncomeBook {
     }
 
     public String getCar(int id){
-        return cars.get(findCar(id)).getCar_number();
+        return cars.get(findCar(id)).getVehicle_number();
     }
     private int findCar(int id){
         int i=0;
