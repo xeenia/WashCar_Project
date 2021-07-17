@@ -314,8 +314,13 @@ public class IncomeBook {
                     var scene2 = new Scene(p_bp_main,500,600);
                     Stage stage2 = new Stage();
                     stage2.setScene(scene2);
+                    stage2.setMinHeight(600);
+                    stage2.setMinWidth(500);
+                    stage2.setMaxHeight(700);
+                    stage2.setMaxWidth(600);
                     stage2.show();      
-                
+                    b_payButton.setOnMousePressed(event -> b_payButton.setStyle("-fx-padding: 3 1 1 3;"));
+                    b_payButton.setOnMouseReleased(event -> b_payButton.setStyle("-fx-padding: 2, 2, 2, 2;"));
                     b_payButton.setOnAction((b1)->{
                         File file = new File("IncomeBook.txt");
                         char c='|';
@@ -334,7 +339,8 @@ public class IncomeBook {
                         }
                        
                     });
-
+                    b_cancelButton.setOnMousePressed(event -> b_cancelButton.setStyle("-fx-padding: 3 1 1 3;"));
+                    b_cancelButton.setOnMouseReleased(event -> b_cancelButton.setStyle("-fx-padding: 2, 2, 2, 2;"));
                     b_cancelButton.setOnAction((b2)->{
                         stage2.close();
                     });
@@ -400,9 +406,6 @@ public class IncomeBook {
     public ObservableList<Car> getCars(){
         return cars;
     }
-    public void createCars(){
-
-    }
     
     public void addCar(Car car){
         cars.add(car);
@@ -413,7 +416,7 @@ public class IncomeBook {
         File tempFile = new File("TempSaved.txt");
         //Stage 1 - write in new file all cars except the cat we want to delete 
         deleteCarFromFile(inputFile, tempFile, id, false);
-        //Stage 2 - Write back the infos drom TempSaved to SavedCars
+        //Stage 2 - Write back the info drom TempSaved to SavedCars
         deleteCarFromFile(tempFile,inputFile,id,true);
       //  cars.remove(findCar(id)); <-παρόλο που μπορώ να το σβήσω έτσι απλά, εγώ επέλεξα να σβήσω όλα τα αμάξια από την λίστα και να τα ξαναγράφω έτσι ώστε τα id να πάνε στην σωστή σειρά 
       //και όχι 0,3,4,5,6
