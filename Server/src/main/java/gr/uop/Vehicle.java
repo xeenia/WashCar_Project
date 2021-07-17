@@ -4,7 +4,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class Car {
+public class Vehicle {
     private int id;
     private String arrival_time;
     private String car_number;
@@ -69,10 +69,10 @@ public class Car {
         this.date = date;
     }
 
-    Car(){
+    Vehicle(){
 
     }
-    Car(int id, String date, String arrival_time, String car_number,int cost,String carType,String services){
+    Vehicle(int id, String date, String arrival_time, String car_number,int cost,String carType,String services){
         this.car_number=car_number;
         this.id=id;
         this.date=date;

@@ -47,7 +47,7 @@ public class Server extends Application {
       }
     Connection connection = new Connection(serverSocket);
     IncomeBook book = new IncomeBook();
-    UI ui = new UI();
+    mainUI ui = new mainUI();
     
     HBox p_hb_logo = ui.createLogo();
     VBox p_vb_center = new VBox();
@@ -70,7 +70,7 @@ public class Server extends Application {
     stage.setTitle("CASH DESK");
     stage.show();   
     
-    FilteredList<Car> filteredlist = new FilteredList<>(book.getCars(), b-> true);
+    FilteredList<Vehicle> filteredlist = new FilteredList<>(book.getCars(), b-> true);
     tx.textProperty().addListener((Observable, oldValue, newValue)->{
       filteredlist.setPredicate(car -> {
         if(newValue == null || newValue.isEmpty()){

@@ -52,7 +52,7 @@ public class IncomeBook {
     String s_Car_Labels[] ={"7","6","12","9","8","15","80","80","20","3"};
     String s_Jeep_Labels[]={"8","7","14","10","9","17","80","90","20","3"};
     String s_Motor_Labels[]={"6","0","0","8","0","0","0","40","10","0"};
-    private ObservableList<Car> cars = FXCollections.observableArrayList();     
+    private ObservableList<Vehicle> cars = FXCollections.observableArrayList();     
     TableView table = new TableView<>(); 
     int inc;
     int lastID;
@@ -66,12 +66,12 @@ public class IncomeBook {
         
         table.setEditable(true);
         table.setPrefHeight(Integer.MAX_VALUE);
-        TableColumn idCol = new TableColumn<Car,Integer>("ID");
-        TableColumn dateCol = new TableColumn<Car,String>("Ημερομηνία");
-        TableColumn timeCol = new TableColumn<Car,String>("Ώρα");
-        TableColumn typeCol = new TableColumn<Car,String>("Όχημα");
-        TableColumn carCol = new TableColumn<Car,String>("Αριθμός Πινακίδας");
-        TableColumn costCol = new TableColumn<Car,Integer>("Κόστος");
+        TableColumn idCol = new TableColumn<Vehicle,Integer>("ID");
+        TableColumn dateCol = new TableColumn<Vehicle,String>("Ημερομηνία");
+        TableColumn timeCol = new TableColumn<Vehicle,String>("Ώρα");
+        TableColumn typeCol = new TableColumn<Vehicle,String>("Όχημα");
+        TableColumn carCol = new TableColumn<Vehicle,String>("Αριθμός Πινακίδας");
+        TableColumn costCol = new TableColumn<Vehicle,Integer>("Κόστος");
   
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
@@ -82,22 +82,22 @@ public class IncomeBook {
         typeCol.setCellValueFactory(new PropertyValueFactory<>("carType"));
   
         //delete button functionality
-        TableColumn<Car, Car> b2Col = new TableColumn<>("Ακύρωση");
-        TableColumn<Car,Car> b1Col = new TableColumn<>("Πληρωμή");
+        TableColumn<Vehicle, Vehicle> b2Col = new TableColumn<>("Ακύρωση");
+        TableColumn<Vehicle,Vehicle> b1Col = new TableColumn<>("Πληρωμή");
         b2Col.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
         );
         b1Col.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
         );
-        b2Col.setCellFactory(param -> new TableCell<Car,Car>() {
+        b2Col.setCellFactory(param -> new TableCell<Vehicle,Vehicle>() {
             Button deleteButton = new Button();
             Image im_refresh = new Image(Server.class.getResourceAsStream("img/deleteIconBlack.png"));
             ImageView refresh_icon = new ImageView(im_refresh);
             
          
             @Override
-            protected void updateItem(Car car, boolean empty) {
+            protected void updateItem(Vehicle car, boolean empty) {
                 super.updateItem(car, empty);
         
                 if (car == null) {
@@ -136,12 +136,12 @@ public class IncomeBook {
         });
 
 
-        b1Col.setCellFactory(param -> new TableCell<Car,Car>() {
+        b1Col.setCellFactory(param -> new TableCell<Vehicle,Vehicle>() {
             Button acceptButton = new Button();
             Image im_refresh = new Image(Server.class.getResourceAsStream("img/payIconReceiptBlack.png"));
             ImageView refresh_icon = new ImageView(im_refresh);
             @Override
-            protected void updateItem(Car car, boolean empty) {
+            protected void updateItem(Vehicle car, boolean empty) {
                 super.updateItem(car, empty);
                 
                 if (car == null) {
@@ -386,7 +386,7 @@ public class IncomeBook {
               String type=data[1];
               int cost=Integer.parseInt(data[3]);
               
-              Car car = new Car(lastID++,date,time,car_number,cost,type,data[2]);
+              Vehicle car = new Vehicle(lastID++,date,time,car_number,cost,type,data[2]);
               addCar(car);
             }
 
@@ -403,11 +403,11 @@ public class IncomeBook {
             e.printStackTrace();
           }
     }
-    public ObservableList<Car> getCars(){
+    public ObservableList<Vehicle> getCars(){
         return cars;
     }
     
-    public void addCar(Car car){
+    public void addCar(Vehicle car){
         cars.add(car);
     }
 
@@ -462,7 +462,7 @@ public class IncomeBook {
     }
     private int findCar(int id){
         int i=0;
-        for(Car car:cars){
+        for(Vehicle car:cars){
             if(car.getId()==id){
                 break;
             }

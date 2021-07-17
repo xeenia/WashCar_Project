@@ -14,11 +14,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class UI {
+public class mainUI {
     
 
 
-    UI(){
+    mainUI(){
         
     }
     public HBox createLogo(){
