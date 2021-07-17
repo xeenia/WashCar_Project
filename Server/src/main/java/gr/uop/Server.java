@@ -25,8 +25,7 @@ public class Server extends Application {
     Connection connection = new Connection();
     IncomeBook book = new IncomeBook();
     mainUI ui = new mainUI();
-    
-    HBox p_hb_logo = ui.createLogo();
+
     VBox p_vb_center = new VBox();
     TextField tx = ui.createSearchField();
     TableView table = book.createTable();
@@ -34,7 +33,7 @@ public class Server extends Application {
     p_vb_center.getChildren().addAll(tx,table);
     VBox p_vb_mainPage = ui.createMainPage();
     Button refreshButton = new Button();
-    p_vb_mainPage.getChildren().addAll(ui.createRefreshButton(refreshButton),p_hb_logo,p_vb_center);
+    p_vb_mainPage.getChildren().addAll(ui.createRefreshButton(refreshButton),ui.createLogo(),p_vb_center);
     var scene = new Scene(p_vb_mainPage, 1024, 768);
     stage.setScene(scene);
     stage.setMinHeight(768);

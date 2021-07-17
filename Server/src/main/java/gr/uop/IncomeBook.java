@@ -53,7 +53,7 @@ public class IncomeBook {
     String s_Car_Labels[] ={"7","6","12","9","8","15","80","80","20","3"};
     String s_Jeep_Labels[]={"8","7","14","10","9","17","80","90","20","3"};
     String s_Motor_Labels[]={"6","0","0","8","0","0","0","40","10","0"};
-    private ObservableList<Vehicle> cars = FXCollections.observableArrayList();     
+    private ObservableList<Vehicle> vehicles = FXCollections.observableArrayList();     
     TableView table = new TableView<>(); 
     int inc;
     int lastID;
@@ -385,15 +385,14 @@ public class IncomeBook {
               String type=data[1];
               int cost=Integer.parseInt(data[3]);
               
-              Vehicle car = new Vehicle(lastID++,date,time,car_number,cost,type,data[2]);
-              addCar(car);
+              Vehicle vehicle = new Vehicle(lastID++,date,time,car_number,cost,type,data[2]);
+              addVehicleToList(vehicle);
             }
 
             myReader.close();
             if(delete){
                 PrintWriter writer = new PrintWriter(myObj);
                 writer.print("");
-                // other operations
                 writer.close();
             }
             
@@ -403,28 +402,28 @@ public class IncomeBook {
           }
     }
     public ObservableList<Vehicle> getCars(){
-        return cars;
+        return vehicles;
     }
     
-    public void addCar(Vehicle car){
-        cars.add(car);
+    public void addVehicleToList(Vehicle vehicle){
+        vehicles.add(vehicle);
     }
 
     public void deleteCar(int id) throws IOException{
         File inputFile = new File("SavedCars.txt");
         File tempFile = new File("TempSaved.txt");
         //Stage 1 - write in new file all cars except the cat we want to delete 
-        deleteCarFromFile(inputFile, tempFile, id, false);
+        deleteVehicleFromFile(inputFile, tempFile, id, false);
         //Stage 2 - Write back the info drom TempSaved to SavedCars
-        deleteCarFromFile(tempFile,inputFile,id,true);
+        deleteVehicleFromFile(tempFile,inputFile,id,true);
       //  cars.remove(findCar(id)); <-παρόλο που μπορώ να το σβήσω έτσι απλά, εγώ επέλεξα να σβήσω όλα τα αμάξια από την λίστα και να τα ξαναγράφω έτσι ώστε τα id να πάνε στην σωστή σειρά 
       //και όχι 0,3,4,5,6
-        cars.clear();
+        vehicles.clear();
         lastID=0;
         getCarsFromFile("SavedCars.txt", false);
         
     }
-    private void deleteCarFromFile(File inputFile, File tempFile, int id, boolean delete) throws IOException{
+    private void deleteVehicleFromFile(File inputFile, File tempFile, int id, boolean delete) throws IOException{
         
         BufferedReader reader;
         BufferedWriter writer;
@@ -435,13 +434,12 @@ public class IncomeBook {
             reader = new BufferedReader(new FileReader(inputFile));
             writer = new BufferedWriter(new FileWriter(tempFile));
         
-            String lineToRemove = getCar(id);
+            String lineToRemove = getVehicleNumber(id);
             String currentLine;
             
             while((currentLine = reader.readLine()) != null) {
-                String data[] = currentLine.split(",");
-                String trimmedLine = data[0].trim();
-                if(trimmedLine.equals(lineToRemove)) continue;
+                String data[] = currentLine.split(",");          
+                if(data[0].equals(lineToRemove)) continue;
                 writer.write(currentLine + System.getProperty("line.separator"));
             }
             writer.close(); 
@@ -456,17 +454,8 @@ public class IncomeBook {
         
     }
 
-    public String getCar(int id){
-        return cars.get(findCar(id)).getVehicle_number();
+    public String getVehicleNumber(int id){
+        return vehicles.get(id).getVehicle_number();
     }
-    private int findCar(int id){
-        int i=0;
-        for(Vehicle car:cars){
-            if(car.getId()==id){
-                break;
-            }
-            i++;
-        }
-        return i;
-    }
+  
 }
