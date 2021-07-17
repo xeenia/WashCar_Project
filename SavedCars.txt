@@ -1,4 +1,1 @@
-847POI,Motorbike,8-9,50,17 July 2021,15:13
-SDD52,Car,4,9,17 July 2021,20:39
-EWA2,Motorbike,4,8,17 July 2021,20:40
 WDFB258,Jeep,5,9,17 July 2021,20:40
