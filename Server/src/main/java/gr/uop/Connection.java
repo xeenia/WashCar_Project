@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class Connection {
     ServerSocket serverSocket;
     Connection(){
+      //Δημιουργία Socket
       try {
         serverSocket = new ServerSocket(5555);
       } catch (IOException e2) {
@@ -19,6 +20,7 @@ public class Connection {
       }
     }
     public void closeConnection() throws IOException{
+      //Κλείσιμο της σύνδεσης
       serverSocket.close();
     }
     public void makeConnection(){
@@ -27,12 +29,16 @@ public class Connection {
             try {
               
             while(true){
-              
+              //ατερμων βρόχος έτσι ώστε να μπορεί να δέχεται το ταμείο τις πληροφορίες συνέχεια όταν το πρόγραμμα είναι ανοιχτό
              Socket socket = serverSocket.accept();
             
              Scanner fromClient = new Scanner(socket.getInputStream());
              //παίρνουμε την πληροφορία από τον client
              String carInfo = fromClient.nextLine();
+             //Διαβάζουμε την πληροφορία η οποία είναι ένα String και στην συνέχεια την τυπώνουμε σε δύο αρχεία
+             //Αρχείο CarWash.txt Για να μπορεί να διαβαστεί αργότερα και να προστεθεί στο TableView
+             //Αρχείο SavedCars.txt έτσι ώστε όταν κλείσει το πρόγραμμα και ξανά ανοίξει τα οχήματα που δεν "έφυγαν" από την επιχείρηση (δλδ δεν πλήρωσαν ή ακυρώθηκαν) να ξανα εμφανιστούν
+             //όταν ξανα ανοίξουμε το πρόγραμμα
              try {
               PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("CarWash.txt", true)));
               PrintWriter out2 = new PrintWriter(new BufferedWriter(new FileWriter("SavedCars.txt", true)));
@@ -52,9 +58,7 @@ public class Connection {
           }
         }catch(IOException ex) {
           System.out.println(ex);
-        }
-      
-          
+        }    
          }).start();
     }
 }

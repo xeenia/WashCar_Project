@@ -28,15 +28,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class IncomeBook {
-    
+    //προσθήκη οχημάτων για την εμφάνιση τους στο TableView
     private ObservableList<Vehicle> vehicles = FXCollections.observableArrayList();     
     TableView table = new TableView<>(); 
-    int inc;
-    int lastID;
+    int lastID; //για τον έλεγχο των ID στο TableView έτσι ώστε όταν σβήνεται ένα όχημα ο αριθμός ID είναι σε σωστή σειρά
     IncomeBook(){
         lastID=0;
+        //Εννοείται με το που φτιαχτεί το αντικείμενο αυτής της κλάσεις, θα διαβάζει  τα οχήματα που πρέπει να μπουν στο TableView 
         getVehiclesFromFile("SavedCars.txt",false);
-        inc=1;
     }
 
     public TableView createTable(){
@@ -58,9 +57,10 @@ public class IncomeBook {
         
         typeCol.setCellValueFactory(new PropertyValueFactory<>("vehicleType"));
   
-        //delete_button functionality
+        //Λειτουργικότητα των κουμπίων παρακάτω
         TableColumn<Vehicle, Vehicle> b2Col = new TableColumn<>("Ακύρωση");
         TableColumn<Vehicle,Vehicle> b1Col = new TableColumn<>("Πληρωμή");
+
         b2Col.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
         );
@@ -69,8 +69,8 @@ public class IncomeBook {
         );
         b2Col.setCellFactory(param -> new TableCell<Vehicle,Vehicle>() {
             Button deleteButton = new Button();
-            Image im_refresh = new Image(Server.class.getResourceAsStream("img/deleteIconBlack.png"));
-            ImageView refresh_icon = new ImageView(im_refresh);
+            Image deleteImg = new Image(Server.class.getResourceAsStream("img/deleteIconBlack.png"));
+            ImageView deleteIcon = new ImageView(deleteImg);
             
          
             @Override
@@ -81,11 +81,11 @@ public class IncomeBook {
                     setGraphic(null);
                     return;
                 }
-                deleteButton.setGraphic(refresh_icon);
+                deleteButton.setGraphic(deleteIcon);
                 setGraphic(deleteButton);
                 deleteButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;");
-                refresh_icon.setFitHeight(20);
-                refresh_icon.setFitWidth(20);
+                deleteIcon.setFitHeight(20);
+                deleteIcon.setFitWidth(20);
                 deleteButton.setOnMousePressed(event -> deleteButton.setStyle("-fx-background-color: transparent; -fx-padding: 3 1 1 3;"));
                  deleteButton.setOnMouseReleased(event -> deleteButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;"));
                 deleteButton.setOnAction((e)->{
@@ -135,6 +135,7 @@ public class IncomeBook {
                 acceptButton.setOnMousePressed(event -> acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 3 1 1 3;"));
                 acceptButton.setOnMouseReleased(event -> acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;"));
                 acceptButton.setOnAction((e)->{
+                    //Κλάση για την εμφάνιση της δεύτερης οθόνης (απόδειξης)
                     ReceiptUI receiptUI = new ReceiptUI(vehicle);
                     
                     var scene2 = new Scene(receiptUI.makeReceiptUI(),500,600);
@@ -151,11 +152,12 @@ public class IncomeBook {
                     receiptUI.getPayButton().setOnAction((b1)->{
                     File file = new File("IncomeBook.txt");
                     try {
-                        
+                        //Μόλις πατήσει πληρωμή τότε θα γραφτεί το όχημα στο IncomeBook.txt μαζί με την νέα ημερομηνία και ώρα αποχώρησης
                         FileWriter fileWriter = new FileWriter(file, true);       
                         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
                         bufferedWriter.write(vehicle.getVehicleType()+","+vehicle.getVehicle_number()+","+vehicle.getServices()+","+vehicle.getDate()+","+vehicle.getArrival_time()+","+receiptUI.getDepDate()+","+receiptUI.getDepTime()+System.getProperty("line.separator"));
                         bufferedWriter.close();
+                        //εννοείται θα διαγραφεί από το το TableView
                         deleteVehicle(vehicle.getId());
                         stage2.close();
                     } catch (IOException e1) {
@@ -217,6 +219,7 @@ public class IncomeBook {
 
             myReader.close();
             if(delete){
+                //διαγραφή περιεχομένου του αρχείου CarWash.txt (θα μπορούσε οποιοδήποτε αρχείο,αρκεί το delete να είναι true)
                 PrintWriter writer = new PrintWriter(myObj);
                 writer.print("");
                 writer.close();

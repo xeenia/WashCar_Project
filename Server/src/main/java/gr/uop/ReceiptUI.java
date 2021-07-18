@@ -113,7 +113,7 @@ public class ReceiptUI {
         Text v2 = new Text();
         Text v3 = new Text();
         String s1="",s2="",s3="";
-
+        //για να εμφανιστούν όλες οι υπηρεσίες το ένα κάτω από το άλλο
         for(int i =0; i<size; i++){
             String n = ((Integer.parseInt(services[i]))!=10)?"0":"";
             s1=s1.concat(n+services[i]+((i==size-1)?"":"\n"));

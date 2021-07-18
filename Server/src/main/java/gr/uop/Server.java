@@ -21,8 +21,11 @@ public class Server extends Application {
       
     @Override
     public void start(Stage stage) {   
+    //ανοίγουμε ενα Socket με το που φτιάχνουμε αντικέιμενο για την κλάση Connection (μέσα στον constructor)
     Connection connection = new Connection();
+    //Αντικείμενο για την κλάση IncomeBook όπου εκεί περιέχεται η λειτουργικότητα του TableView, διάβασμα οχημάτων από το σύστημα υποδοχής, διαγραφή οχημάτων κτλ.
     IncomeBook book = new IncomeBook();
+    //Κλάση για την εμφάνιση του ταμείου
     mainUI ui = new mainUI();
 
     VBox p_vb_center = new VBox();
@@ -39,7 +42,7 @@ public class Server extends Application {
     stage.setMinWidth(1024);
     stage.setTitle("CASH DESK");
     stage.show();   
-    
+    //το Search Text Field για αναζήτηση κάποιου συγκεκριμένου οχήματος στο TableView. Θα μπορεί να αναζητήσει μόνο ID, αριθμό πινακίδας και είδος οχήματος
     FilteredList<Vehicle> filteredlist = new FilteredList<>(book.getVehicles(), b-> true);
     tx.textProperty().addListener((Observable, oldValue, newValue)->{
       filteredlist.setPredicate(car -> {
@@ -57,14 +60,15 @@ public class Server extends Application {
       });
     });
     table.setItems(filteredlist);
-
+    //Λειτουργικότητα του κουμπίου Refresh έτσι ώστε να ξεκινήσει το διάβασμα νέων οχημάτων από το πρόγραμμα υποδοχής
     refreshButton.setOnAction((e)->{
       book.getVehiclesFromFile("CarWash.txt",true);
     });
 
-    
+  //εδώ ξεκινάμε την σύνδεση, δλδ που αποδεχόμαστε αίτημα ή αιτήματα από το πρόγραμμα υποδοχής
   connection.makeConnection(); 
-    
+    //Μια απλή ενημέρωση για όταν το πρόγραμμα είναι έτοιμο να κλείσει.
+    //Επιπρόσθετα, πριν το πρόγρραμμα κλείσει θα διακόψουμε την σύνδεση και θα καθαρίσουμε το αρχείο CarWash.txt 
    stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, (e) -> {
     Alert alert = new Alert(AlertType.CONFIRMATION, "Είστε σίγουροι ότι θέλετε να κλείσετε το πρόγραμμα;");
     Optional<ButtonType> result = alert.showAndWait();
