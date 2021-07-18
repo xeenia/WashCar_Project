@@ -35,7 +35,7 @@ public class IncomeBook {
     int lastID;
     IncomeBook(){
         lastID=0;
-        getCarsFromFile("SavedCars.txt",false);
+        getVehiclesFromFile("SavedCars.txt",false);
         inc=1;
     }
 
@@ -102,7 +102,7 @@ public class IncomeBook {
                     //αν επιλέξει οκ τότε θα μπούμε στην if
                     if(buttonT.get()==ButtonType.OK){
                         try {
-                            deleteCar(car.getId());
+                            deleteVehicle(car.getId());
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
@@ -115,8 +115,8 @@ public class IncomeBook {
 
         b1Col.setCellFactory(param -> new TableCell<Vehicle,Vehicle>() {
             Button acceptButton = new Button();
-            Image im_refresh = new Image(Server.class.getResourceAsStream("img/payIconReceiptBlack.png"));
-            ImageView refresh_icon = new ImageView(im_refresh);
+            Image img = new Image(Server.class.getResourceAsStream("img/payIconReceiptBlack.png"));
+            ImageView imgView = new ImageView(img);
             @Override
             protected void updateItem(Vehicle vehicle, boolean empty) {
                 super.updateItem(vehicle, empty);
@@ -126,12 +126,12 @@ public class IncomeBook {
                     return;
                 }
         
-                acceptButton.setGraphic(refresh_icon);
+                acceptButton.setGraphic(imgView);
                 setGraphic(acceptButton);
                 
                 acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;");
-                refresh_icon.setFitHeight(20);
-                refresh_icon.setFitWidth(20);
+                imgView.setFitHeight(20);
+                imgView.setFitWidth(20);
                 acceptButton.setOnMousePressed(event -> acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 3 1 1 3;"));
                 acceptButton.setOnMouseReleased(event -> acceptButton.setStyle("-fx-background-color: transparent; -fx-padding: 2, 2, 2, 2;"));
                 acceptButton.setOnAction((e)->{
@@ -152,12 +152,11 @@ public class IncomeBook {
                     File file = new File("IncomeBook.txt");
                     try {
                         
-                        FileWriter fileWriter = new FileWriter(file, true);
-                        
+                        FileWriter fileWriter = new FileWriter(file, true);       
                         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
                         bufferedWriter.write(vehicle.getVehicleType()+","+vehicle.getVehicle_number()+","+vehicle.getServices()+","+vehicle.getDate()+","+vehicle.getArrival_time()+","+receiptUI.getDepDate()+","+receiptUI.getDepTime()+System.getProperty("line.separator"));
                         bufferedWriter.close();
-                        deleteCar(vehicle.getId());
+                        deleteVehicle(vehicle.getId());
                         stage2.close();
                     } catch (IOException e1) {
                         e1.printStackTrace();
@@ -199,7 +198,7 @@ public class IncomeBook {
         return table;
       }
 
-    public void getCarsFromFile(String filename,boolean delete){
+    public void getVehiclesFromFile(String filename,boolean delete){
         try {
             File myObj = new File(filename);
             Scanner myReader = new Scanner(myObj);
@@ -228,7 +227,7 @@ public class IncomeBook {
             e.printStackTrace();
           }
     }
-    public ObservableList<Vehicle> getCars(){
+    public ObservableList<Vehicle> getVehicles(){
         return vehicles;
     }
     
@@ -236,7 +235,7 @@ public class IncomeBook {
         vehicles.add(vehicle);
     }
 
-    public void deleteCar(int id) throws IOException{
+    public void deleteVehicle(int id) throws IOException{
         File inputFile = new File("SavedCars.txt");
         File tempFile = new File("TempSaved.txt");
         //Stage 1 - write in new file all cars except the cat we want to delete 
@@ -247,7 +246,7 @@ public class IncomeBook {
       //και όχι 0,3,4,5,6
         vehicles.clear();
         lastID=0;
-        getCarsFromFile("SavedCars.txt", false);
+        getVehiclesFromFile("SavedCars.txt", false);
         
     }
     private void deleteVehicleFromFile(File inputFile, File tempFile, int id, boolean delete) throws IOException{
