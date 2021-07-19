@@ -31,7 +31,7 @@ int price = 0;
             for(int j=0; j< 10; j++){
                 if(index == 0 ){
                     Button letter_button = new Button(letters[index]);
-                    letter_button.setPrefSize(40, 40);
+                    letter_button.setPrefSize(60, 50);
                     lettersPane.add(letter_button,j,i);
                     buttons.put(letters[index], letter_button);
                 }else if(index == 26){
@@ -40,7 +40,7 @@ int price = 0;
                 // change line when we find "P" and "L" in order to simulate a real keyboard
                 if((index!=0) && (!letters[index-1].equals("P") || !letters[index-1].equals("L"))){
                     Button letter_button = new Button(letters[index]);
-                    letter_button.setPrefSize(40, 40);
+                    letter_button.setPrefSize(60, 50);
                     lettersPane.add(letter_button,j,i);
                     buttons.put(letters[index], letter_button);
                     if(letters[index].equals("L")){
@@ -58,14 +58,14 @@ int price = 0;
             for(int j=0; j< 3; j++){
                 if(index == 0 ){
                     Button number_button = new Button(numbers[index]);
-                    number_button.setPrefSize(40, 40);
+                    number_button.setPrefSize(60, 50);
                     numbersPane.add(number_button,j,i);
                     buttons.put(numbers[index], number_button);
                 }else if(index == 10){
                     break;
                 }
                 Button number_button = new Button(numbers[index]);
-                number_button.setPrefSize(40, 40);
+                number_button.setPrefSize(60, 50);
                 numbersPane.add(number_button,j,i);
                 buttons.put(numbers[index], number_button);
                 index++;
@@ -95,6 +95,7 @@ int price = 0;
               switch (b.getText()) {
                 case "1":
                 //disables radiobuttons
+
                   for(RadioButton rb  : radiobuttons){
                     if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
                       rb.setDisable(true);
@@ -102,20 +103,23 @@ int price = 0;
                   }
                   //reactivates disabled radiobuttons
                   if(!b.isSelected()){
-                    for(RadioButton rb  : radiobuttons){
-                      if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
-                        rb.setDisable(false);
-                      }
+                    
+                    if(radiobuttons.get(1).isSelected()||radiobuttons.get(4).isSelected()){
+                      radiobuttons.get(3).setDisable(false);
+                    }else {
+                      radiobuttons.get(2).setDisable(false);
+                      radiobuttons.get(3).setDisable(false);
+                      radiobuttons.get(5).setDisable(false);
                     }
-                  }
+              
+                    }
+                  
                   //add service price to total
                   if(b.isSelected()){
                     price+=7;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=7;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -128,20 +132,22 @@ int price = 0;
                   }
                   //reactivates disabled radiobuttons
                   if(!b.isSelected()){
-                    for(RadioButton rb  : radiobuttons){
-                      if(rb.getText().equals("3") || rb.getText().equals("5") || rb.getText().equals("6")){
-                        rb.setDisable(false);
-                      }
+                    
+                    if(radiobuttons.get(0).isSelected()||radiobuttons.get(3).isSelected()){
+                      radiobuttons.get(4).setDisable(false);
+                    }else {
+                      radiobuttons.get(2).setDisable(false);
+                      radiobuttons.get(4).setDisable(false);
+                      radiobuttons.get(5).setDisable(false);
                     }
-                  }
+              
+                    }
                   //add service price to total
                   if(b.isSelected()){
                     price+=6;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=6;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -163,11 +169,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=12;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=12;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -180,20 +184,22 @@ int price = 0;
                   }
                   //reactivates disabled radiobuttons
                   if(!b.isSelected()){
-                    for(RadioButton rb  : radiobuttons){
-                      if(rb.getText().equals("1") || rb.getText().equals("3") || rb.getText().equals("6")){
-                        rb.setDisable(false);
-                      }
+                    
+                    if(radiobuttons.get(1).isSelected()||radiobuttons.get(4).isSelected()){
+                      radiobuttons.get(0).setDisable(false);
+                    }else {
+                      radiobuttons.get(0).setDisable(false);
+                      radiobuttons.get(2).setDisable(false);
+                      radiobuttons.get(5).setDisable(false);
                     }
-                  }
+              
+                    }
                   //add service price to total
                   if(b.isSelected()){
                     price+=9;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=9;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -206,20 +212,22 @@ int price = 0;
                   }
                   //reactivates disabled radiobuttons
                   if(!b.isSelected()){
-                    for(RadioButton rb  : radiobuttons){
-                      if(rb.getText().equals("2") || rb.getText().equals("3") || rb.getText().equals("6")){
-                        rb.setDisable(false);
-                      }
+                    
+                    if(radiobuttons.get(0).isSelected()||radiobuttons.get(3).isSelected()){
+                      radiobuttons.get(1).setDisable(false);
+                    }else {
+                      radiobuttons.get(1).setDisable(false);
+                      radiobuttons.get(2).setDisable(false);
+                      radiobuttons.get(5).setDisable(false);
                     }
-                  }
+              
+                    }
                   //add service price to total
                   if(b.isSelected()){
                     price+=8;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=8;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -241,11 +249,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=15;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=15;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -255,11 +261,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=80;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=80;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -267,11 +271,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=20;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=20;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -279,11 +281,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=3;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=3;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -305,20 +305,20 @@ int price = 0;
                   }
                   //reactivates disabled radiobuttons
                   if(!b.isSelected()){
-                    for(RadioButton rb  : radiobuttons){
-                      if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
-                        rb.setDisable(false);
-                      }
+                    if(radiobuttons.get(1).isSelected()||radiobuttons.get(4).isSelected()){
+                      radiobuttons.get(3).setDisable(false);
+                    }else {
+                      radiobuttons.get(2).setDisable(false);
+                      radiobuttons.get(3).setDisable(false);
+                      radiobuttons.get(5).setDisable(false);
                     }
                   }
                   //add service price to total
                   if(b.isSelected()){
                     price+=8;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=8;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -331,20 +331,20 @@ int price = 0;
                   }
                    //reactivates disabled radiobuttons
                   if(!b.isSelected()){
-                    for(RadioButton rb  : radiobuttons){
-                      if(rb.getText().equals("3") || rb.getText().equals("5") || rb.getText().equals("6")){
-                        rb.setDisable(false);
-                      }
+                    if(radiobuttons.get(0).isSelected()||radiobuttons.get(3).isSelected()){
+                      radiobuttons.get(4).setDisable(false);
+                    }else {
+                      radiobuttons.get(2).setDisable(false);
+                      radiobuttons.get(4).setDisable(false);
+                      radiobuttons.get(5).setDisable(false);
                     }
                   }
                   //add service price to total
                   if(b.isSelected()){
                     price+=7;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=7;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -366,11 +366,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=14;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=14;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -383,20 +381,20 @@ int price = 0;
                   }
                    //reactivates disabled radiobuttons
                   if(!b.isSelected()){
-                    for(RadioButton rb  : radiobuttons){
-                      if(rb.getText().equals("1") || rb.getText().equals("3") || rb.getText().equals("6")){
-                        rb.setDisable(false);
-                      }
+                    if(radiobuttons.get(1).isSelected()||radiobuttons.get(4).isSelected()){
+                      radiobuttons.get(0).setDisable(false);
+                    }else {
+                      radiobuttons.get(0).setDisable(false);
+                      radiobuttons.get(2).setDisable(false);
+                      radiobuttons.get(5).setDisable(false);
                     }
                   }
                   //add service price to total
                   if(b.isSelected()){
                     price+=10;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=10;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -409,20 +407,21 @@ int price = 0;
                   }
                    //reactivates disabled radiobuttons
                   if(!b.isSelected()){
-                    for(RadioButton rb  : radiobuttons){
-                      if(rb.getText().equals("2") || rb.getText().equals("3") || rb.getText().equals("6")){
-                        rb.setDisable(false);
-                      }
+                    if(radiobuttons.get(0).isSelected()||radiobuttons.get(3).isSelected()){
+                      radiobuttons.get(1).setDisable(false);
+                    }else {
+                      radiobuttons.get(1).setDisable(false);
+                      radiobuttons.get(2).setDisable(false);
+                      radiobuttons.get(5).setDisable(false);
                     }
+              
                   }
                   //add service price to total
                   if(b.isSelected()){
                     price+=9;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=9;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -444,11 +443,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=17;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=17;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -456,11 +453,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=80;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=80;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -468,11 +463,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=90;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=90;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -480,11 +473,11 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=20;
-                    System.out.println("Add price: "+price);
+                     
                   //if not selected subtract service price from total
                   }else{
                     price-=20;
-                    System.out.println("Sub price: "+price);
+
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -492,11 +485,11 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=3;
-                    System.out.println("Add price: "+price);
+                     
                   //if not selected subtract service price from total
                   }else{
                     price-=3;
-                    System.out.println("Sub price: "+price);
+ 
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -529,11 +522,11 @@ int price = 0;
                     //add service price to total
                     if(b.isSelected()){
                       price+=6;
-                      System.out.println("Add price: "+price);
+                       
                     //if not selected subtract service price from total
                     }else{
                       price-=6;
-                      System.out.println("Sub price: "+price);
+   
                     }
                     motopricefield.setText(String.valueOf(price));
                     break;
@@ -553,11 +546,11 @@ int price = 0;
                     //add service price to total
                     if(b.isSelected()){
                       price+=8;
-                      System.out.println("Add price: "+price);
+                       
                     //if not selected subtract service price from total
                     }else{
                       price-=8;
-                      System.out.println("Sub price: "+price);
+   
                     }
                     motopricefield.setText(String.valueOf(price));
                     break;
@@ -565,11 +558,11 @@ int price = 0;
                     //add service price to total
                     if(b.isSelected()){
                       price+=40;
-                      System.out.println("Add price: "+price);
+                       
                     //if not selected subtract service price from total
                     }else{
                       price-=40;
-                      System.out.println("Sub price: "+price);
+   
                     }
                     motopricefield.setText(String.valueOf(price));
                     break;
@@ -577,11 +570,11 @@ int price = 0;
                     //add service price to total
                     if(b.isSelected()){
                       price+=10;
-                      System.out.println("Add price: "+price);
+                       
                     //if not selected subtract service price from total
                     }else{
                       price-=10;
-                      System.out.println("Sub price: "+price);
+   
                     }
                     motopricefield.setText(String.valueOf(price));
                     break;
@@ -590,22 +583,5 @@ int price = 0;
             }
           }
         return price;
-    }
-    public void radioButtonRestrictions(RadioButton primaryButton, RadioButton secondaryButton){
-
-      switch(primaryButton.getText()){
-        case "1":
-          if (secondaryButton.getText().equals("2")) {
-            
-          } else if(secondaryButton.getText().equals("3")) {
-            
-          } else if(secondaryButton.getText().equals("4")){
-
-          }else if(secondaryButton.getText().equals("5")){
-
-          }else if (secondaryButton.getText().equals("6"))
-        break;
-      }
-
     }
 }

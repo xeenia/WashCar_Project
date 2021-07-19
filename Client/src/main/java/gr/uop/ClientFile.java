@@ -1,41 +1,36 @@
 package gr.uop;
 
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class ClientFile {
     
     ClientFile(){
-        try (Socket socket = new Socket("localhost", 5555);
-             PrintWriter toServer = new PrintWriter(socket.getOutputStream(), true);
-             ObjectInputStream fromServer = new ObjectInputStream(socket.getInputStream())) {
-
-            String filename = "CarWash.txt";
-
-            // Send the filename to the server
-            toServer.println(filename);
-
-            try (FileOutputStream fileWriter = new FileOutputStream(filename)) {
-                int bufferSize = 100;
-                byte[] fileBytes = new byte[bufferSize];
-
-                int bytesRead = fromServer.read(fileBytes);
-                while (bytesRead > 0) {
-                    System.out.println(bytesRead);
-
-                    // Write the bytes received to the file
-                    fileWriter.write(fileBytes, 0, bytesRead);
-
-                    // Read the next group of bytes from the server
-                    bytesRead = fromServer.read(fileBytes);
-                }
+        new Thread(()->{
+            try{
+              //μπαινουμε στο αρχειο και διαβάζουμε την πρώτη γραμμή, δηλαδή το αμάξι που μόλις αποθηκευσάμε
+              File file = new File("CarWash.txt");
+              Scanner fileScanner = new Scanner(file);
+              String carInfo=fileScanner.nextLine();
+              //συνδεόμαστε με τον σέρβερ
+              Socket socket = new Socket("localhost", 5555);
+              PrintWriter toServer = new PrintWriter(socket.getOutputStream(), true);
+              //στέλνουμε την πληροφορία στον σέρβερ
+              toServer.println(carInfo);
+              //κλείνουμε την σύνδεση
+              socket.close();
+              //σβήνουμε το αρχείο για να μη ξαναπαίρνουμε την ίδια πληροφορία, κι έτσι κι αλλιώς αφού ο σέρβερ πήρε το αμάξι τότε δεν το χρειαζόμαστε πάλι
+              PrintWriter writer = new PrintWriter(file);
+              writer.print("");
+              // other operations
+              writer.close();
+            }catch (IOException ex) {
+              System.out.println(ex);
             }
-        }
-        catch (IOException e) {
-            System.out.println(e);
-        }
+           
+          }).start();
     }
 }

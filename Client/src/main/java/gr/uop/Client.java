@@ -54,13 +54,12 @@ TableColumn<Product, String> motorbikepriceColumn ;
 ObservableList<RadioButton> radiobuttons  = FXCollections.observableArrayList();
 Stage second_stage = new Stage();
 Stage stage = new Stage();
-ClientFile clientfile = new ClientFile();
-HelperClass helper = new HelperClass();
+//ClientFile clientfile = new ClientFile();
+FileHelper file = new FileHelper();
+HelperClass helper= new HelperClass();
 
     @Override
     public void start(Stage stage) {
-
-      FileHelper.CreateFile();
 
       this.stage=stage;
       HBox logo = createLogo();
@@ -137,7 +136,7 @@ HelperClass helper = new HelperClass();
               alert.showAndWait();
               
               if (alert.getResult() == ButtonType.YES) {
-                //calls methos that creates service window
+                //calls method that creates service window
                 secondaryScene();
               // reset stringbuilder value
               }else if(alert.getResult() == ButtonType.NO || alert.getResult() == ButtonType.CANCEL){
@@ -163,7 +162,6 @@ HelperClass helper = new HelperClass();
           }else{
             if(!m.getKey().equals("Enter") && !m.getKey().equals("Backspace")){
               text.setText(m.getKey());
-              System.out.println(text.getText());
             }else if (m.getKey().equals("Backspace")){
               String result = null;
               if ((text.getText() != null) && (text.getText().length() > 0)) {
@@ -177,13 +175,11 @@ HelperClass helper = new HelperClass();
           //fixed a bug where after closing second window the license plate was added to itself
           if(!stringbuilder.equals(text.getText()) || stringbuilder.length()<2){
             stringbuilder+=text.getText();
-            System.out.println(stringbuilder); 
             text.setText(stringbuilder);
           }
         });
       }  
-    }  
-
+    }
     // our company's logo
     public HBox createLogo(){
       var lb_incBook = new Label("\t \t \tWelcome!! \n \t Please enter your license plate");
@@ -203,25 +199,25 @@ HelperClass helper = new HelperClass();
     //Creates services list scene
     public void secondaryScene(){
       HBox table_box = productlistWindow();
-                VBox scene_box = new VBox();
-                VBox bottom_box = new VBox();
-                HBox button_box = new HBox();
+      VBox scene_box = new VBox();
+      VBox bottom_box = new VBox();
+      HBox button_box = new HBox();
                 
-                Button cancel_button = new Button("Cancel");
-                cancel_button.setPadding(new Insets(5,5,5,5));
+      Button cancel_button = new Button("Cancel");
+      cancel_button.setPadding(new Insets(5,5,5,5));
                 
-                button_box.getChildren().addAll(cancel_button);
-                button_box.setAlignment(Pos.CENTER);
-                button_box.setSpacing(10);
+      button_box.getChildren().addAll(cancel_button);
+      button_box.setAlignment(Pos.CENTER);
+      button_box.setSpacing(10);
 
-                bottom_box.getChildren().addAll(button_box);
-                bottom_box.setAlignment(Pos.CENTER);
-                bottom_box.setPadding(new Insets(10, 0, 10, 0));
-                bottom_box.setSpacing(10);
+      bottom_box.getChildren().addAll(button_box);
+      bottom_box.setAlignment(Pos.CENTER);
+      bottom_box.setPadding(new Insets(10, 0, 10, 0));
+      bottom_box.setSpacing(10);
 
-                scene_box.getChildren().addAll(table_box, bottom_box);
-                scene_box.setAlignment(Pos.CENTER);
-                scene_box.setPadding(new Insets(10, 0, 0, 0));
+      scene_box.getChildren().addAll(table_box, bottom_box);
+      scene_box.setAlignment(Pos.CENTER);
+      scene_box.setPadding(new Insets(10, 0, 0, 0));
                 scene_box.setStyle("-fx-background-color:#abdbe3;");
 
                 var scene2 = new Scene(scene_box, 1024, 768); 
@@ -234,7 +230,6 @@ HelperClass helper = new HelperClass();
                 stage.hide();
                 second_stage.show();
                 
-                System.out.println(stringbuilder);
                 second_stage.setOnCloseRequest(event ->{
                   stringbuilder = "";
                   price_textfield.setText("");
@@ -433,16 +428,13 @@ HelperClass helper = new HelperClass();
             }
           }
           String rbData = String.join("-", selectedValues);
-          System.out.println(rbData);
-          // String data ="";
           //write data in file type(licence plate, vehicle type,service id, service price for car)
           data = String.join(",", stringbuilder, "Car", rbData, carpricefield.getText());
-          FileHelper.WriteToFile(data);
+          file.WriteToFile(data);
           rbData="";
           data="";
           for(RadioButton b  : radiobuttons){
             if(b.isSelected()){
-              //selectedValues.add(b.getText());
               b.setSelected(false);
             }
           }
@@ -531,7 +523,7 @@ HelperClass helper = new HelperClass();
           System.out.println(rbData);
           //String data ="";
           data = String.join(",", stringbuilder, "Jeep", rbData, jeeppricefield.getText());
-          FileHelper.WriteToFile(data);
+          file.WriteToFile(data);
           rbData="";
           data="";
           for(RadioButton b  : radiobuttons){
@@ -559,7 +551,6 @@ HelperClass helper = new HelperClass();
         jeep_stage.close();
         second_stage.show();
       });
-      
     }
 
     //motorbike scene
@@ -627,7 +618,7 @@ HelperClass helper = new HelperClass();
           String rbData = String.join("-", selectedValues);
           //String data ="";
           data = String.join(",", stringbuilder, "Motorbike", rbData, motopricefield.getText());
-          FileHelper.WriteToFile(data);
+          file.WriteToFile(data);
           rbData="";
           data="";
           for(RadioButton b  : radiobuttons){
@@ -686,5 +677,6 @@ HelperClass helper = new HelperClass();
     
     public static void main(String[] args) {
         launch(args);
+        
     }
 }
