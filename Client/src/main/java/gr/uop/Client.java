@@ -61,11 +61,6 @@ HelperClass helper= new HelperClass();
     @Override
     public void start(Stage stage) {
 
-      
-        
-    
-
-
       this.stage=stage;
       HBox logo = createLogo();
       HBox textPane = new HBox();
@@ -186,17 +181,7 @@ HelperClass helper= new HelperClass();
           }
         });
       }  
-      
-     
-
-      
-      }
-
-
-
-
-     
-
+    }
     // our company's logo
     public HBox createLogo(){
       var lb_incBook = new Label("\t \t \tWelcome!! \n \t Please enter your license plate");
