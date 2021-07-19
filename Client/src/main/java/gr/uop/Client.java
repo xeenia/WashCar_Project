@@ -35,7 +35,6 @@ import javafx.stage.Stage;
 
 public class Client extends Application {
   
-int price = 0;
 String stringbuilder ="";
 String[] servicesplit;
 String data ="";
@@ -58,6 +57,7 @@ Stage second_stage = new Stage();
 Stage stage = new Stage();
 //ClientFile clientfile = new ClientFile();
 FileHelper file = new FileHelper();
+HelperClass helper= new HelperClass();
     @Override
     public void start(Stage stage) {
 
@@ -70,7 +70,7 @@ FileHelper file = new FileHelper();
       HBox logo = createLogo();
       HBox textPane = new HBox();
       VBox mainPage = new VBox();
- 
+      
       text.setPromptText("Please enter your licence plate");
       text.setPrefSize(200, 40);
       text.setEditable(false);
@@ -199,7 +199,7 @@ FileHelper file = new FileHelper();
 
     // our company's logo
     public HBox createLogo(){
-      var lb_incBook = new Label("Income Book");
+      var lb_incBook = new Label("\t \t \tWelcome!! \n \t Please enter your license plate");
       lb_incBook.setTextFill(Color.web("#FFFFFF"));
       lb_incBook.setFont(Font.font("Arial",FontWeight.BOLD,30));
       StackPane p_st_lbIncBook = new StackPane(lb_incBook);
@@ -250,7 +250,6 @@ FileHelper file = new FileHelper();
                 System.out.println(stringbuilder);
                 second_stage.setOnCloseRequest(event ->{
                   stringbuilder = "";
-                  price=0;
                   price_textfield.setText("");
                   //text.setText("");
                   second_stage.close();
@@ -261,7 +260,6 @@ FileHelper file = new FileHelper();
                   Alert cancel_alert = new Alert(AlertType.CONFIRMATION,"To get back to main menu press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
                   cancel_alert.showAndWait();
                   if (cancel_alert.getResult() == ButtonType.YES) {
-                    price=0;
                     price_textfield.setText("");
                     second_stage.close();
                     stage.show();
@@ -297,7 +295,7 @@ FileHelper file = new FileHelper();
       idColumn.setResizable(false);
 
       //Name column
-      nameColumn = new TableColumn<>("Product");
+      nameColumn = new TableColumn<>("Υπηρεσία");
       nameColumn.setMinWidth(200);
       nameColumn.setSortable(false);
       nameColumn.setCellValueFactory(new PropertyValueFactory<>("product_name"));
@@ -305,7 +303,7 @@ FileHelper file = new FileHelper();
       nameColumn.setResizable(false);
       
       //carprice column
-      carpriceColumn = new TableColumn<>("Car Price");
+      carpriceColumn = new TableColumn<>("Τιμή Αμαξιού");
       carpriceColumn.setMinWidth(100);
       carpriceColumn.setSortable(false);
       carpriceColumn.setCellValueFactory(new PropertyValueFactory<>("car_price"));
@@ -313,7 +311,7 @@ FileHelper file = new FileHelper();
       carpriceColumn.setResizable(false);
 
       //jeepprice column
-      jeeppriceColumn = new TableColumn<>("Jeep Price");
+      jeeppriceColumn = new TableColumn<>("Τιμή Τζιπ");
       jeeppriceColumn.setMinWidth(100);
       jeeppriceColumn.setSortable(false);
       jeeppriceColumn.setCellValueFactory(new PropertyValueFactory<>("jeep_price"));
@@ -321,7 +319,7 @@ FileHelper file = new FileHelper();
       jeeppriceColumn.setResizable(false);
 
       //motorbikeprice column
-      motorbikepriceColumn = new TableColumn<>("Motorbike Price");
+      motorbikepriceColumn = new TableColumn<>("Τιμή Μηχανής");
       motorbikepriceColumn.setMinWidth(100);
       motorbikepriceColumn.setSortable(false);
       motorbikepriceColumn.setCellValueFactory(new PropertyValueFactory<>("motorbike_price"));
@@ -438,7 +436,7 @@ FileHelper file = new FileHelper();
 
       //send total price to second stage plus resetting price
       carconfirmbutton.setOnAction(e->{
-        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ price + "€"  + "\nIf you want to continue with payment press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ carpricefield.getText() + "€"  + "\nIf you want to continue with payment press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
         confirm_alert.showAndWait();
         if (confirm_alert.getResult() == ButtonType.YES) {
           List<String> selectedValues = new ArrayList<String>();
@@ -455,7 +453,6 @@ FileHelper file = new FileHelper();
           file.WriteToFile(data);
           rbData="";
           data="";
-          price = 0;
           for(RadioButton b  : radiobuttons){
             if(b.isSelected()){
               //selectedValues.add(b.getText());
@@ -470,7 +467,6 @@ FileHelper file = new FileHelper();
           stage.show();
         }
         else if (confirm_alert.getResult() == ButtonType.CANCEL) {
-          price = 0;
           carpricefield.setText("");
           car_stage.close();
           second_stage.show();
@@ -481,7 +477,6 @@ FileHelper file = new FileHelper();
 
       //reset price on close
       car_stage.setOnCloseRequest(event ->{
-        price=0;
         carpricefield.setText("");
         car_stage.close();
         second_stage.show();
@@ -538,7 +533,7 @@ FileHelper file = new FileHelper();
 
       //send total price to second stage plus reseting price
       jeepconfirmbutton.setOnAction(e->{
-        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ price + "€"  + "\nIf you want to continue with payment press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ jeeppricefield.getText() + "€"  + "\nIf you want to continue with payment press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
         confirm_alert.showAndWait();
         if (confirm_alert.getResult() == ButtonType.YES) {
           List<String> selectedValues = new ArrayList<String>();
@@ -554,9 +549,8 @@ FileHelper file = new FileHelper();
           file.WriteToFile(data);
           rbData="";
           data="";
-          price = 0;for(RadioButton b  : radiobuttons){
+          for(RadioButton b  : radiobuttons){
             if(b.isSelected()){
-              //selectedValues.add(b.getText());
               b.setSelected(false);
             }
           }
@@ -568,7 +562,6 @@ FileHelper file = new FileHelper();
           text.setText("");
           stage.show();
         }else if (confirm_alert.getResult() == ButtonType.CANCEL) {
-          price = 0;
           jeeppricefield.setText("");
           jeep_stage.close();
           second_stage.show();
@@ -579,7 +572,6 @@ FileHelper file = new FileHelper();
 
       //reset price on close
       jeep_stage.setOnCloseRequest(event ->{
-        price=0;
         jeeppricefield.setText("");
         jeep_stage.close();
         second_stage.show();
@@ -640,7 +632,7 @@ FileHelper file = new FileHelper();
 
       //send total price to second stage plus reseting price
       motoconfirmbutton.setOnAction(e->{
-        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ price + "€"  + "\nIf you want to continue with payment press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+        Alert confirm_alert = new Alert(AlertType.CONFIRMATION,"Your total is: "+ motopricefield.getText() + "€"  + "\nIf you want to continue with payment press YES", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
         confirm_alert.showAndWait();
         if (confirm_alert.getResult() == ButtonType.YES) {
           List<String> selectedValues = new ArrayList<String>();
@@ -655,11 +647,9 @@ FileHelper file = new FileHelper();
           file.WriteToFile(data);
           rbData="";
           data="";
-          price = 0;
           for(RadioButton b  : radiobuttons){
             if(b.isSelected()){
               b.setSelected(false);
-              //selectedValues.remove(b.getText());
             }
           }
           motopricefield.setText("");
@@ -669,7 +659,6 @@ FileHelper file = new FileHelper();
           text.setText("");
           stage.show();
         }else if (confirm_alert.getResult() == ButtonType.CANCEL) {
-          price = 0;
           motopricefield.setText("");
           moto_stage.close();
           second_stage.show();
@@ -678,7 +667,6 @@ FileHelper file = new FileHelper();
 
       //reset price on close
       moto_stage.setOnCloseRequest(event ->{
-        price=0;
         motopricefield.setText("");
         moto_stage.close();
         second_stage.show();
@@ -700,21 +688,19 @@ FileHelper file = new FileHelper();
       rbbox.setPadding(new Insets(26, 0, 0, 5));
       rbbox.setSpacing(7);
 
-      System.out.println("Starting price: "+price);
-
       // cases when car button is pressed 
       if(button.getGraphic().equals(car_button.getGraphic())){
-        price = HelperClass.carRadiobuttons(radiobuttons, carpricefield);
+        helper.carRadiobuttons(radiobuttons, carpricefield);
       // cases when jeep button is pressed
       }else if(button.getGraphic().equals(jeep_button.getGraphic())){
-        price = HelperClass.jeepRadiobuttons(radiobuttons, jeeppricefield);
+        helper.jeepRadiobuttons(radiobuttons, jeeppricefield);
       // cases when motorbike button is pressed
       }else if(button.getGraphic().equals(moto_button.getGraphic())){
-        price = HelperClass.motoRadiobuttons(radiobuttons, motopricefield);
+        helper.motoRadiobuttons(radiobuttons, motopricefield);
       }
-
       return rbbox;
     }
+    
     public static void main(String[] args) {
         launch(args);
         
