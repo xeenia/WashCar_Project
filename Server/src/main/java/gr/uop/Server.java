@@ -85,7 +85,6 @@ public class Server extends Application {
             }
         }
         else if (result.get() == ButtonType.CANCEL) {
-            System.out.println("Cancel");
             e.consume();
         }
    }

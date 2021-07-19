@@ -30,8 +30,8 @@ import javafx.stage.Stage;
 public class IncomeBook {
     //προσθήκη οχημάτων για την εμφάνιση τους στο TableView
     private ObservableList<Vehicle> vehicles = FXCollections.observableArrayList();     
-    TableView table = new TableView<>(); 
-    int lastID; //για τον έλεγχο των ID στο TableView έτσι ώστε όταν σβήνεται ένα όχημα ο αριθμός ID είναι σε σωστή σειρά
+    private TableView table = new TableView<>(); 
+    private int lastID; //για τον έλεγχο των ID στο TableView έτσι ώστε όταν σβήνεται ένα όχημα ο αριθμός ID είναι σε σωστή σειρά
     IncomeBook(){
         lastID=0;
         //Εννοείται με το που φτιαχτεί το αντικείμενο αυτής της κλάσεις, θα διαβάζει  τα οχήματα που πρέπει να μπουν στο TableView 

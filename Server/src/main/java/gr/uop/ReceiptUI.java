@@ -20,24 +20,24 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 public class ReceiptUI {
-    protected String s_Labels[] = {
+    private String s_Labels[] = {
         "Πλύσιμο εξωτερικό","Πλύσιμο εσωτερικό",
         "Πλύσιμο εξωτερικό & εσωτερικό", "Πλύσιμο εξωτερικό σπέσιαλ",
         "Πλύσιμο εσωτερικό σπέσιαλ","Πλύσιμο εξωτερικό & εσωτερικό σπέσιαλ",
         "Βιολογικός καθαρισμός εσωτερικό","Κέρωμα‐Γυάλισμα","Καθαρισμός κινητήρα",
         "Πλύσιμο σασί"
     };
-    protected String s_Car_Labels[] ={"7","6","12","9","8","15","80","80","20","3"};
-    protected String s_Jeep_Labels[]={"8","7","14","10","9","17","80","90","20","3"};
-    protected String s_Motor_Labels[]={"6","0","0","8","0","0","0","40","10","0"};
-    protected Vehicle vehicle;
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-    protected String depTime = java.time.LocalTime.now().format(dtf);
+    private String s_Car_Labels[] ={"7","6","12","9","8","15","80","80","20","3"};
+    private String s_Jeep_Labels[]={"8","7","14","10","9","17","80","90","20","3"};
+    private String s_Motor_Labels[]={"6","0","0","8","0","0","0","40","10","0"};
+    private Vehicle vehicle;
+    
+    private String depTime ;
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
-    protected String depDate = java.time.LocalDate.now().format(formatter);
-    protected Button b_payButton;
-    protected Button b_cancelButton;
+    
+    private String depDate ;
+    private Button b_payButton;
+    private Button b_cancelButton;
    
    public String getDepTime(){
     return depTime;
@@ -140,6 +140,7 @@ public class ReceiptUI {
         p_hb_servAndInfo.setAlignment(Pos.CENTER);
         p_hb_receiptInfo.setLeft(p_hb_servAndInfo);
         p_hb_receiptInfo.setRight(p_vb_price);
+        p_hb_receiptInfo.setStyle("-fx-background-color: #ffffff;");
         p_hb_receiptInfo.setPadding(new Insets(10,30,10,30));
         return p_hb_receiptInfo;
     }
@@ -205,6 +206,9 @@ public class ReceiptUI {
     }
     ReceiptUI(Vehicle vehicle){
         this.vehicle=vehicle;
-        
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
+        depTime =  java.time.LocalTime.now().format(dtf);
+        depDate = java.time.LocalDate.now().format(formatter);
     }
 }

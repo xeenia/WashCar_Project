@@ -21,8 +21,8 @@ public class Vehicle {
         return this.vehicleType;
     }
 
-    public void setVehicleType(String carType) {
-        this.vehicleType = carType;
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
     }    
 
     public int getId() {
@@ -45,8 +45,8 @@ public class Vehicle {
         return this.vehicle_number;
     }
 
-    public void setVehicle_number(String car_number) {
-        this.vehicle_number = car_number;
+    public void setVehicle_number(String vehicle_number) {
+        this.vehicle_number = vehicle_number;
     }
 
     public int getCost() {
