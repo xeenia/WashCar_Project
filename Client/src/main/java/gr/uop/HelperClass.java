@@ -142,11 +142,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=7;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=7;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -172,11 +170,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=6;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=6;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -198,11 +194,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=12;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=12;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -228,11 +222,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=9;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=9;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -258,11 +250,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=8;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=8;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -284,11 +274,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=15;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=15;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -298,11 +286,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=80;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=80;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -310,11 +296,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=20;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=20;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -322,11 +306,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=3;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=3;
-                    System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
                   break;
@@ -348,20 +330,20 @@ int price = 0;
                   }
                   //reactivates disabled radiobuttons
                   if(!b.isSelected()){
-                    for(RadioButton rb  : radiobuttons){
-                      if(rb.getText().equals("3") || rb.getText().equals("4") || rb.getText().equals("6")){
-                        rb.setDisable(false);
-                      }
+                    if(radiobuttons.get(1).isSelected()||radiobuttons.get(4).isSelected()){
+                      radiobuttons.get(3).setDisable(false);
+                    }else {
+                      radiobuttons.get(2).setDisable(false);
+                      radiobuttons.get(3).setDisable(false);
+                      radiobuttons.get(5).setDisable(false);
                     }
                   }
                   //add service price to total
                   if(b.isSelected()){
                     price+=8;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=8;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -374,20 +356,20 @@ int price = 0;
                   }
                    //reactivates disabled radiobuttons
                   if(!b.isSelected()){
-                    for(RadioButton rb  : radiobuttons){
-                      if(rb.getText().equals("3") || rb.getText().equals("5") || rb.getText().equals("6")){
-                        rb.setDisable(false);
-                      }
+                    if(radiobuttons.get(0).isSelected()||radiobuttons.get(3).isSelected()){
+                      radiobuttons.get(4).setDisable(false);
+                    }else {
+                      radiobuttons.get(2).setDisable(false);
+                      radiobuttons.get(4).setDisable(false);
+                      radiobuttons.get(5).setDisable(false);
                     }
                   }
                   //add service price to total
                   if(b.isSelected()){
                     price+=7;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=7;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -409,11 +391,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=14;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=14;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -426,20 +406,20 @@ int price = 0;
                   }
                    //reactivates disabled radiobuttons
                   if(!b.isSelected()){
-                    for(RadioButton rb  : radiobuttons){
-                      if(rb.getText().equals("1") || rb.getText().equals("3") || rb.getText().equals("6")){
-                        rb.setDisable(false);
-                      }
+                    if(radiobuttons.get(1).isSelected()||radiobuttons.get(4).isSelected()){
+                      radiobuttons.get(0).setDisable(false);
+                    }else {
+                      radiobuttons.get(0).setDisable(false);
+                      radiobuttons.get(2).setDisable(false);
+                      radiobuttons.get(5).setDisable(false);
                     }
                   }
                   //add service price to total
                   if(b.isSelected()){
                     price+=10;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=10;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -452,20 +432,21 @@ int price = 0;
                   }
                    //reactivates disabled radiobuttons
                   if(!b.isSelected()){
-                    for(RadioButton rb  : radiobuttons){
-                      if(rb.getText().equals("2") || rb.getText().equals("3") || rb.getText().equals("6")){
-                        rb.setDisable(false);
-                      }
+                    if(radiobuttons.get(0).isSelected()||radiobuttons.get(3).isSelected()){
+                      radiobuttons.get(1).setDisable(false);
+                    }else {
+                      radiobuttons.get(1).setDisable(false);
+                      radiobuttons.get(2).setDisable(false);
+                      radiobuttons.get(5).setDisable(false);
                     }
+              
                   }
                   //add service price to total
                   if(b.isSelected()){
                     price+=9;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=9;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -487,11 +468,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=17;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=17;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -499,11 +478,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=80;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=80;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -511,11 +488,9 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=90;
-                    System.out.println("Add price: "+price);
                   //if not selected subtract service price from total
                   }else{
                     price-=90;
-                    System.out.println("Sub price: "+price);
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -523,11 +498,11 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=20;
-                    System.out.println("Add price: "+price);
+                     
                   //if not selected subtract service price from total
                   }else{
                     price-=20;
-                    System.out.println("Sub price: "+price);
+
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -535,11 +510,11 @@ int price = 0;
                   //add service price to total
                   if(b.isSelected()){
                     price+=3;
-                    System.out.println("Add price: "+price);
+                     
                   //if not selected subtract service price from total
                   }else{
                     price-=3;
-                    System.out.println("Sub price: "+price);
+ 
                   }
                   jeeppricefield.setText(String.valueOf(price));
                   break;
@@ -572,11 +547,11 @@ int price = 0;
                     //add service price to total
                     if(b.isSelected()){
                       price+=6;
-                      System.out.println("Add price: "+price);
+                       
                     //if not selected subtract service price from total
                     }else{
                       price-=6;
-                      System.out.println("Sub price: "+price);
+   
                     }
                     motopricefield.setText(String.valueOf(price));
                     break;
@@ -596,11 +571,11 @@ int price = 0;
                     //add service price to total
                     if(b.isSelected()){
                       price+=8;
-                      System.out.println("Add price: "+price);
+                       
                     //if not selected subtract service price from total
                     }else{
                       price-=8;
-                      System.out.println("Sub price: "+price);
+   
                     }
                     motopricefield.setText(String.valueOf(price));
                     break;
@@ -608,11 +583,11 @@ int price = 0;
                     //add service price to total
                     if(b.isSelected()){
                       price+=40;
-                      System.out.println("Add price: "+price);
+                       
                     //if not selected subtract service price from total
                     }else{
                       price-=40;
-                      System.out.println("Sub price: "+price);
+   
                     }
                     motopricefield.setText(String.valueOf(price));
                     break;
@@ -620,11 +595,11 @@ int price = 0;
                     //add service price to total
                     if(b.isSelected()){
                       price+=10;
-                      System.out.println("Add price: "+price);
+                       
                     //if not selected subtract service price from total
                     }else{
                       price-=10;
-                      System.out.println("Sub price: "+price);
+   
                     }
                     motopricefield.setText(String.valueOf(price));
                     break;
