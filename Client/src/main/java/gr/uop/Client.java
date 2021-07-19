@@ -67,13 +67,13 @@ HelperClass helper= new HelperClass();
       VBox mainPage = new VBox();
       
       text.setPromptText("Please enter your licence plate");
-      text.setPrefSize(200, 40);
+      text.setPrefSize(200, 70);
       text.setEditable(false);
       text.setMouseTransparent(true);
       text.setFocusTraversable(false);
 
       Button enter_button = new Button("Enter");
-      enter_button.setPrefSize(80, 40);
+      enter_button.setPrefSize(100, 70);
       textPane.getChildren().addAll(text,enter_button);
       textPane.setSpacing(15);
       textPane.setAlignment(Pos.CENTER);
@@ -116,7 +116,7 @@ HelperClass helper= new HelperClass();
       mainPage.setPadding(new Insets(20,20,20,20));
       mainPage.getChildren().addAll(logo,keyboard,textPane);
       mainPage.setSpacing(20);
-
+      mainPage.setSpacing(50);
       var scene = new Scene(mainPage, 1024, 768);
       stage.setScene(scene);
       stage.setMinHeight(768);

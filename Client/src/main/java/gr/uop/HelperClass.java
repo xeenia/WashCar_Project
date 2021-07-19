@@ -10,6 +10,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 public class HelperClass {
 int price = 0; 
@@ -30,17 +31,23 @@ int price = 0;
         for(int i=0; i< 3; i++){
             for(int j=0; j< 10; j++){
                 if(index == 0 ){
-                    Button letter_button = new Button(letters[index]);
-                    letter_button.setPrefSize(60, 50);
-                    lettersPane.add(letter_button,j,i);
-                    buttons.put(letters[index], letter_button);
+                  Text text = new Text(letters[index]);   
+                  text.setStyle("-fx-font-size:20;");          
+                  Button letter_button = new Button();
+                  letter_button.setGraphic(text);
+                  letter_button.setPrefSize(70, 70);
+                  lettersPane.add(letter_button,j,i);
+                  buttons.put(letters[index], letter_button);
                 }else if(index == 26){
                 break;
                 }
                 // change line when we find "P" and "L" in order to simulate a real keyboard
                 if((index!=0) && (!letters[index-1].equals("P") || !letters[index-1].equals("L"))){
-                    Button letter_button = new Button(letters[index]);
-                    letter_button.setPrefSize(60, 50);
+                  Text text = new Text(letters[index]);   
+                  text.setStyle(" -fx-font-size:20;");          
+                  Button letter_button = new Button();
+                  letter_button.setGraphic(text);  
+                    letter_button.setPrefSize(70, 70);
                     lettersPane.add(letter_button,j,i);
                     buttons.put(letters[index], letter_button);
                     if(letters[index].equals("L")){
@@ -57,34 +64,52 @@ int price = 0;
         for(int i=0; i< 3; i++){
             for(int j=0; j< 3; j++){
                 if(index == 0 ){
-                    Button number_button = new Button(numbers[index]);
-                    number_button.setPrefSize(60, 50);
+                    Text text = new Text(numbers[index]);   
+                    text.setStyle("-fx-font-size:20;");          
+                    Button number_button = new Button();
+                    number_button.setGraphic(text);
+                  
+                    number_button.setPrefSize(70, 70);
                     numbersPane.add(number_button,j,i);
                     buttons.put(numbers[index], number_button);
                 }else if(index == 10){
                     break;
                 }
-                Button number_button = new Button(numbers[index]);
-                number_button.setPrefSize(60, 50);
+                Text text = new Text(numbers[index]);   
+                text.setStyle("-fx-font-size:20;");          
+                Button number_button = new Button();
+                number_button.setGraphic(text);
+                number_button.setPrefSize(70, 70);
                 numbersPane.add(number_button,j,i);
                 buttons.put(numbers[index], number_button);
                 index++;
                 }
             }
-        Button backspace_button = new Button ("Backspace");
-        backspace_button.setPrefSize(95, 40);
+        Text text = new Text("Backspace");   
+        text.setStyle("-fx-font-size:20;");  
+        Button backspace_button = new Button ();
+        backspace_button.setGraphic(text);
+        backspace_button.setPrefSize((70*3)+10, 70);
+        Text text2 = new Text(" ");   
+        text2.setStyle("-fx-font-size:20;");
         Button space_button = new Button ();
-        space_button.setPrefSize(340, 40);
-        Button zero_button = new Button ("0");
-        zero_button.setPrefSize(130, 40);
+        space_button.setGraphic(text2);
+        space_button.setPrefSize((70*7)+25, 70);
+        Text text3 = new Text("0");   
+        text3.setStyle("-fx-font-size:20;");
+        Button zero_button = new Button ();
+        zero_button.setGraphic(text3);
+        zero_button.setPrefSize((70*3), 70);
       
         buttons.put("Backspace", backspace_button);
         buttons.put(" ", space_button);
         buttons.put("0", zero_button);
         buttons.put("Enter", enter_button);
-
-        big_keysPane.getChildren().addAll(space_button,backspace_button,zero_button);
-        big_keysPane.setSpacing(20);
+        HBox spaceAndBackspace = new HBox(space_button,backspace_button);
+        spaceAndBackspace.setSpacing(5);
+        big_keysPane.getChildren().addAll(spaceAndBackspace,zero_button);
+        big_keysPane.setSpacing(25);
+        
         big_keysPane.setAlignment(Pos.CENTER);
     }
 
