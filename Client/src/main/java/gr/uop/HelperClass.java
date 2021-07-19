@@ -12,7 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
 public class HelperClass {
-static int price = 0; 
+int price = 0; 
     // Creates Keyboard layout
     public static void keyboardLayout(GridPane lettersPane, GridPane numbersPane, HBox big_keysPane, Map<String, Button> buttons, Button enter_button){
 
@@ -88,7 +88,8 @@ static int price = 0;
         big_keysPane.setAlignment(Pos.CENTER);
     }
 
-    public static int carRadiobuttons(ObservableList<RadioButton> radiobuttons, TextField carpricefield){
+    public void carRadiobuttons(ObservableList<RadioButton> radiobuttons, TextField carpricefield){
+      price=0;
         for(RadioButton  b: radiobuttons){
             b.setOnAction((k)->{
               switch (b.getText()) {
@@ -114,8 +115,6 @@ static int price = 0;
                   //if not selected subtract service price from total
                   }else{
                     price-=7;
-                    // service.split(",");
-                    // System.out.println(service);
                     System.out.println("Sub price: "+price);
                   }
                   carpricefield.setText(String.valueOf(price));
@@ -291,9 +290,9 @@ static int price = 0;
               }
             });
           }
-        return price;
     }
-    public static int jeepRadiobuttons(ObservableList<RadioButton> radiobuttons, TextField jeeppricefield){
+    public int jeepRadiobuttons(ObservableList<RadioButton> radiobuttons, TextField jeeppricefield){
+      price=0;
         for(RadioButton b  : radiobuttons){
             b.setOnAction((k)->{
               switch (b.getText()) {
@@ -506,7 +505,8 @@ static int price = 0;
           }
         return price;
     }
-    public static int motoRadiobuttons(ObservableList<RadioButton> radiobuttons, TextField motopricefield){
+    public int motoRadiobuttons(ObservableList<RadioButton> radiobuttons, TextField motopricefield){
+      price=0;
         for(RadioButton b  : radiobuttons){
             if(b.getText().equals("2") || b.getText().equals("3") || b.getText().equals("5") || b.getText().equals("6") || b.getText().equals("7") || b.getText().equals("10")){
               b.setDisable(true);
@@ -590,5 +590,22 @@ static int price = 0;
             }
           }
         return price;
+    }
+    public void radioButtonRestrictions(RadioButton primaryButton, RadioButton secondaryButton){
+
+      switch(primaryButton.getText()){
+        case "1":
+          if (secondaryButton.getText().equals("2")) {
+            
+          } else if(secondaryButton.getText().equals("3")) {
+            
+          } else if(secondaryButton.getText().equals("4")){
+
+          }else if(secondaryButton.getText().equals("5")){
+
+          }else if (secondaryButton.getText().equals("6"))
+        break;
+      }
+
     }
 }

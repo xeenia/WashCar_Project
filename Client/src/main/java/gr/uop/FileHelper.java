@@ -8,9 +8,9 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.net.Socket; 
 
-public class CreateFile {
+public class  FileHelper{
 
-    public CreateFile(){
+    public static void CreateFile(){
         try {
             File myObj = new File("CarWash.txt");
             if (myObj.createNewFile()) {
