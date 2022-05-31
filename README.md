@@ -1,4 +1,4 @@
-A university project for the subject "Advanced Programming Topics". In this project we made an Wash Car application.
+A university project for the subject "Advanced Programming Topics". In this project we made a Wash Car application.
 
 We wrote this program in JAVA and we used JavaFX for the GUI/UI. Also this program supports Client/Server connection.
 
